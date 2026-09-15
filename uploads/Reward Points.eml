@@ -1,0 +1,199 @@
+Delivered-To: tasleems.ug.24.am@francisxavier.ac.in
+Received: by 2002:a17:505:1142:b0:1ea1:fd83:3693 with SMTP id sn2csp2686886njb;
+        Mon, 31 Aug 2026 02:40:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=2; AHgh+Ro7MN7PcgVea81Bsh1bkYPIsm3ETTJVyPkak6GnyGOvwlJB6xPX1pVTLYKQ67WNvtJzL1UvWvoby70vneFJcaQBNg==@francisxavier.ac.in
+X-Received: by 2002:a05:6808:178f:b0:4b3:7a14:6b25 with SMTP id 5614622812f47-4b5b16edde7mr1583311b6e.14.1788169246354;
+        Mon, 31 Aug 2026 02:40:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788169246; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OJO0QvhLuxa9lL5GNyzyLBGInQLa4lyhEj2v0ZJY0qKlvDUw4rV5vCyA9sBsbqJkGL
+         R3rblMOdfB7L4UuyxEoNqobx8FkMapGq4Me/a3O1xFcUiHrLUZMK2jZXt8/+QjMXkRz/
+         B+GHjXc5p6ETqxRbi7FVHAj3CNmYjkIvSovHets4WmVto5cwKdiObjbbfvuztIuTDAQ2
+         3PBFxDIabIFelKBLq/wiFKfAJqxx8FYELAANOEN1CZgF8mShqJCZuP+yWBtRGU5QB4Il
+         jJC1mu+DSShj9cMGe/n07AUA4+fRLJO48C9RJXy1iOs0ARj/vOhDcvs9vrsi+443pZdj
+         ezXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=list-unsubscribe:list-archive:list-help:list-post:list-id
+         :mailing-list:precedence:mime-version:subject:message-id:to:from
+         :date:dkim-signature;
+        bh=nK0i9g+BCom4xAZYd6AphA6HOk+Mh+OZoE9bzw7uNIE=;
+        fh=11StP+5lSvFvK9ajyMHiNKP1Z3lT/AiiqYUDRtrSZrI=;
+        b=kfJemWE97x0gHcYkX+z1QitkizlZgyvNECQJnvn3LQfjHn2+a3WltSmKG0tpVc1xQs
+         SWx2kWJJLcXDXT3EBxiczxIsNYlDdCjpUXT8p0xTVeM/OC9Srrip5o+SNFsbJGq8zzHM
+         8tmF5C/vhlCTTxVQjyR5XiHCDpBtyqq2oHSAFQ+xSkdEw7jSsVz76s97yc69NduhD8iq
+         occtxRXjUCyzfp/AZwXjQeoAWrs6l6sNX63pwiUK3Vzv1oe+IIg6mspbyl+mloWNEMFm
+         9zznFks5t2RTRQ2MKdcC7NUxS7fFKY0Qeqr6L7dwLs8G+Ui0Id7ThUbBmLsoz3vQ0j1T
+         wjUg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@francisxavier-ac-in.20251104.gappssmtp.com header.s=20251104 header.b=r31Qi93U;
+       spf=none (google.com: 24rpa+bncbchkx6nzzicrbhey2xkamgqehxeko4i@francisxavier.ac.in does not designate permitted sender hosts) smtp.mailfrom=24rpa+bncBCHKX6NZZICRBHEY2XKAMGQEHXEKO4I@francisxavier.ac.in;
+       dara=neutral header.i=@francisxavier.ac.in
+Return-Path: <24rpa+bncBCHKX6NZZICRBHEY2XKAMGQEHXEKO4I@francisxavier.ac.in>
+Received: from mail-sor-f69.google.com (mail-sor-f69.google.com. [209.85.220.69])
+        by mx.google.com with SMTPS id 5614622812f47-4b3a1b10299sor2332573b6e.16.2026.08.31.02.40.46
+        for <tasleems.ug.24.am@francisxavier.ac.in>
+        (Google Transport Security);
+        Mon, 31 Aug 2026 02:40:46 -0700 (PDT)
+Received-SPF: none (google.com: 24rpa+bncbchkx6nzzicrbhey2xkamgqehxeko4i@francisxavier.ac.in does not designate permitted sender hosts) client-ip=209.85.220.69;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@francisxavier-ac-in.20251104.gappssmtp.com header.s=20251104 header.b=r31Qi93U;
+       spf=none (google.com: 24rpa+bncbchkx6nzzicrbhey2xkamgqehxeko4i@francisxavier.ac.in does not designate permitted sender hosts) smtp.mailfrom=24rpa+bncBCHKX6NZZICRBHEY2XKAMGQEHXEKO4I@francisxavier.ac.in;
+       dara=neutral header.i=@francisxavier.ac.in
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=francisxavier-ac-in.20251104.gappssmtp.com; s=20251104; t=1788169246; x=1788774046; darn=francisxavier.ac.in;
+        h=list-unsubscribe:list-archive:list-help:list-post:list-id
+         :mailing-list:precedence:x-original-sender:content-type:mime-version
+         :subject:message-id:to:from:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=nK0i9g+BCom4xAZYd6AphA6HOk+Mh+OZoE9bzw7uNIE=;
+        b=r31Qi93UqVDs/Z8lZsrCLWv5eoYCcLLgTY4gIvHEcLm/R2QUb0tGeGcduBAwWVvMMJ
+         yUKpeQSUldwM35o5+e10CdkeiBgseNg0d9byjkijWDycZ9e+QsuRdj4KTAZgW/OSn3Yj
+         VeIc7JGyX1RCrHZpw1fy0qrF/DqlGI3ofVzSihFZsNFsVvX1+PW8WCB68zZHJ1GlRvZW
+         HD30omAbirjjxry2HaKvwuCdh21pLRu1jekAtZXLTedAMICJEmAKuasbH2CAzh+/8j9p
+         AOc+UyKPYlOrVhbuFVBfMxzM/Npt5zbetlLa6v2aceHDFGN2yTw7IG+pqtxa7EvUZYyR
+         6qRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788169246; x=1788774046;
+        h=list-unsubscribe:list-archive:list-help:list-post
+         :x-spam-checked-in-group:list-id:mailing-list:precedence
+         :x-original-sender:content-type:mime-version:subject:message-id:to
+         :from:date:x-beenthere:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nK0i9g+BCom4xAZYd6AphA6HOk+Mh+OZoE9bzw7uNIE=;
+        b=QFpLdzMQgHLueyuqekGEJH98Q4Z8dJWjDlIOnIdDOXFPQvIpKxALST99c8QFDhvm1H
+         3I+A+MEpDeEb6uq3HhWN43PdumJ0g8xaGnMCzf2azxQJJM7Nq3mrVV4x+QuokWbQAF7y
+         Ruxd97RNFWMB2ny0EnHhjRaj5BMceZNVzJZ/N+FUOBqL2H+d919i+hkHkptuWyoIcLXa
+         riVdwgnlxTmgeVj5+p8eLyRteQdjrR1ae7iDv591w98Dc8Q7J2+SUKg2P+4G3Y44Al2y
+         p8pGH21/9eG4P0sbOiEXnKuiHBY6yvnZhXyEEXVBx7FAzDtTQ+2oJXxJBKHBPHA3iHI0
+         s+uQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqhNfee1egYSTAQllq4McRNB4SfqrKfONXOV0BldIELiWaFJ0nLqG/rGKroho3pZP0GxGiowEoX8KgxU0/ETMR+EA==@francisxavier.ac.in
+X-Gm-Message-State: AFuF++lqFLoD4y0XaHkdcJCNnPbr8a8JfPoYWSOIbhVVWN/Y6PaPef8q
+	8ZSOuHGD9rMTl4hxqDMzJP8X9XUrT9mk59/nF/rNXBPVOyTaPZroO9j7VqrYHX7SJFqlTw==
+X-Received: by 2002:a05:6808:1303:b0:497:da47:df5f with SMTP id 5614622812f47-4b5b177f0c0mr1525830b6e.17.1788169245617;
+        Mon, 31 Aug 2026 02:40:45 -0700 (PDT)
+X-BeenThere: 24rpa@francisxavier.ac.in; h="ATskLdeMgFNFzklkPY0l9UuzVEBfqI79tnexs568W0tuek7A/g=="
+Received: by 2002:a05:6870:c276:b0:46a:cd38:8b8a with SMTP id
+ 586e51a60fabf-46acd38e6d3ls1036151fac.2.-pod-prod-05-us; Mon, 31 Aug 2026
+ 02:40:44 -0700 (PDT)
+X-Received: by 2002:a05:6808:11cb:b0:4b3:7da2:f393 with SMTP id 5614622812f47-4b39824de8bmr24862293b6e.15.1788169244191;
+        Mon, 31 Aug 2026 02:40:44 -0700 (PDT)
+Date: Mon, 31 Aug 2026 02:40:43 -0700 (PDT)
+From: DAVID AYLING J FXEC <davidayling@francisxavier.ac.in>
+To: 24RPA <24rpa@francisxavier.ac.in>
+Message-Id: <b85c061f-2eac-4e23-a015-c65a22022166n@francisxavier.ac.in>
+Subject: Reward Points
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_105166_1087889599.1788169243664"
+X-Original-Sender: davidayling@francisxavier.ac.in
+Precedence: list
+Mailing-list: list 24rpa@francisxavier.ac.in; contact 24rpa+owners@francisxavier.ac.in
+List-ID: <24rpa.francisxavier.ac.in>
+X-Spam-Checked-In-Group: 24rpa@francisxavier.ac.in
+X-Google-Group-Id: 266780545635
+List-Post: <https://groups.google.com/a/francisxavier.ac.in/group/24rpa/post>, <mailto:24rpa@francisxavier.ac.in>
+List-Help: <https://support.google.com/a/francisxavier.ac.in/bin/topic.py?topic=25838>,
+ <mailto:24rpa+help@francisxavier.ac.in>
+List-Archive: <https://groups.google.com/a/francisxavier.ac.in/group/24rpa/>
+List-Unsubscribe: <mailto:googlegroups-manage+266780545635+unsubscribe@googlegroups.com>,
+ <https://groups.google.com/a/francisxavier.ac.in/group/24rpa/subscribe>
+
+------=_Part_105166_1087889599.1788169243664
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_105167_98824172.1788169243664"
+
+------=_Part_105167_98824172.1788169243664
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+
+
+Dear III Year Students,
+
+The *Reward Points Week* is now open!
+
+You can earn a total of *400 Reward Points* through the following=20
+assessments:
+
+   - *GATE Preparation:* 5 days =E2=80=93 *200 Points*
+   - *GD Preparation:* 4 days =E2=80=93 *200 Points* (160 + 40 Points)
+
+The assessments will be available *every day from 6:00 p.m. to 9:00 a.m.=20
+the following day*.
+
+Click the link below to know more about the assessments and participate.
+
+*Make the most of this opportunity and earn your Reward Points!*
+
+
+*Click Here: GATE Preparation Assessments=20
+<https://rewardsportal.fxecdigital.org/semester-6/gate-preparation> (You=20
+are asked to take a screenshot of the score) *
+
+*Click Here: Group Discussion Tips=20
+<https://rewardsportal.fxecdigital.org/semester-6/group-discussion-tips> (Y=
+ou=20
+are asked to dowmload the answerscript on completion)*
+
+
+These two assessments are Open to ALL III year Students. No separate=20
+Registration Required.=20
+
+If you face any technical issues write to *davidayling@francisxavier.ac.in*
+
+
+--=20
+You received this message because you are subscribed to the Google Groups "=
+24RPA" group.
+To unsubscribe from this group and stop receiving emails from it, send an e=
+mail to 24rpa+unsubscribe@francisxavier.ac.in.
+To view this discussion visit https://groups.google.com/a/francisxavier.ac.=
+in/d/msgid/24rpa/b85c061f-2eac-4e23-a015-c65a22022166n%40francisxavier.ac.i=
+n.
+For more options, visit https://groups.google.com/a/francisxavier.ac.in/d/o=
+ptout.
+
+------=_Part_105167_98824172.1788169243664
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<p>Dear III Year Students,</p><p>The <strong>Reward Points Week</strong> is=
+ now open!</p><p>You can earn a total of <strong>400 Reward Points</strong>=
+ through the following assessments:</p><ul><li><strong>GATE Preparation:</s=
+trong> 5 days =E2=80=93 <strong>200 Points</strong></li><li><strong>GD Prep=
+aration:</strong> 4 days =E2=80=93 <strong>200 Points</strong> (160 + 40 Po=
+ints)</li></ul><p>The assessments will be available <strong>every day from =
+6:00 p.m. to 9:00 a.m. the following day</strong>.</p><p>Click the link bel=
+ow to know more about the assessments and participate.</p><p><strong>Make t=
+he most of this opportunity and earn your Reward Points!</strong></p><p><st=
+rong>Click Here:=C2=A0<a href=3D"https://rewardsportal.fxecdigital.org/seme=
+ster-6/gate-preparation">GATE Preparation Assessments</a>=C2=A0(You are ask=
+ed to take a screenshot of the score)=C2=A0<br /></strong></p><p><b>Click H=
+ere:=C2=A0<a href=3D"https://rewardsportal.fxecdigital.org/semester-6/group=
+-discussion-tips">Group Discussion Tips</a>=C2=A0(You are asked to dowmload=
+ the answerscript on completion)</b></p><p><br /></p><p>These two assessmen=
+ts are Open to ALL III year Students. No separate Registration Required.=C2=
+=A0</p><p>If you face any technical issues write to <b>davidayling@francisx=
+avier.ac.in</b></p><p><strong><br /></strong></p>
+
+<p></p>
+
+-- <br />
+You received this message because you are subscribed to the Google Groups &=
+quot;24RPA&quot; group.<br />
+To unsubscribe from this group and stop receiving emails from it, send an e=
+mail to <a href=3D"mailto:24rpa+unsubscribe@francisxavier.ac.in">24rpa+unsu=
+bscribe@francisxavier.ac.in</a>.<br />
+To view this discussion visit <a href=3D"https://groups.google.com/a/franci=
+sxavier.ac.in/d/msgid/24rpa/b85c061f-2eac-4e23-a015-c65a22022166n%40francis=
+xavier.ac.in?utm_medium=3Demail&utm_source=3Dfooter">https://groups.google.=
+com/a/francisxavier.ac.in/d/msgid/24rpa/b85c061f-2eac-4e23-a015-c65a2202216=
+6n%40francisxavier.ac.in</a>.<br />
+For more options, visit <a href=3D"https://groups.google.com/a/francisxavie=
+r.ac.in/d/optout">https://groups.google.com/a/francisxavier.ac.in/d/optout<=
+/a>.<br />
+
+------=_Part_105167_98824172.1788169243664--
+
+------=_Part_105166_1087889599.1788169243664--

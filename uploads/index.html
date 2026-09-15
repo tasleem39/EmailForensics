@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="screen active" id="home">
+    <h1 class="title">NEON TIC TAC TOE</h1>
+    <button class="btn cyan" onclick="goTo('names')">PLAY</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="screen" id="names">
+    <h2 class="subtitle">ENTER PLAYER NAMES</h2>
+
+    <label>PLAYER 1 (X)</label>
+    <input id="playerX" placeholder="Enter name">
+
+    <label>PLAYER 2 (O)</label>
+    <input id="playerO" placeholder="Enter name">
+
+    <button class="btn cyan" onclick="startGame()">START GAME</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="screen" id="game">
+    <div id="turnText" class="turn"></div>
+
+    <div class="board">
+        <div class="cell" onclick="move(0)"></div>
+        <div class="cell" onclick="move(1)"></div>
+        <div class="cell" onclick="move(2)"></div>
+        <div class="cell" onclick="move(3)"></div>
+        <div class="cell" onclick="move(4)"></div>
+        <div class="cell" onclick="move(5)"></div>
+        <div class="cell" onclick="move(6)"></div>
+        <div class="cell" onclick="move(7)"></div>
+        <div class="cell" onclick="move(8)"></div>
+    </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="screen" id="win">
+    <h1 id="winText"></h1>
+    <button class="btn cyan" onclick="goTo('end')">CONTINUE</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="screen" id="end">
+    <button class="btn cyan" onclick="playAgain()">PLAY AGAIN</button>
+    <button class="btn magenta" onclick="exitGame()">EXIT</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
