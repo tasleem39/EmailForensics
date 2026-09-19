@@ -23,6 +23,7 @@ import json
 import email
 import ipaddress
 import hashlib
+import base64
 from datetime import datetime
 from email import policy
 from email.parser import BytesParser
@@ -47,6 +48,8 @@ def parse_email(filepath):
         "dkim_signature_present": msg.get("DKIM-Signature") is not None,
         "message_id": str(msg.get("Message-ID", "")),
         "body": get_body_text(msg),
+        "inline_images": get_inline_images(msg),
+        "attachments": get_attachment_metadata(msg),
     }
 
 
@@ -66,6 +69,52 @@ def get_body_text(msg):
         except Exception:
             return ""
     return ""
+
+
+def get_inline_images(msg):
+    images = []
+    if not msg.is_multipart():
+        return images
+
+    for part in msg.walk():
+        if not part.get_content_maintype() == "image":
+            continue
+        payload = part.get_payload(decode=True)
+        if not payload:
+            continue
+        content_type = part.get_content_type()
+        content_id = str(part.get("Content-ID", "")).strip("<>")
+        images.append({
+            "filename": part.get_filename() or "inline-image",
+            "content_id": content_id,
+            "content_type": content_type,
+            "data_uri": f"data:{content_type};base64,{base64.b64encode(payload).decode('ascii')}",
+            "size": len(payload),
+        })
+    return images
+
+
+def get_attachment_metadata(msg):
+    attachments = []
+    if not msg.is_multipart():
+        return attachments
+
+    for part in msg.walk():
+        if part.get_content_maintype() == "multipart":
+            continue
+        disposition = part.get_content_disposition()
+        filename = part.get_filename()
+        if part.get_content_maintype() == "image" and part.get("Content-ID"):
+            continue
+        if disposition != "attachment" and not filename:
+            continue
+        payload = part.get_payload(decode=True) or b""
+        attachments.append({
+            "filename": filename or "unnamed attachment",
+            "content_type": part.get_content_type(),
+            "size": len(payload),
+        })
+    return attachments
 
 
 # ---------- 2. AUTH CHECK (SPF / DMARC / DKIM) ----------
@@ -651,7 +700,37 @@ def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=
         f"{', '.join(item['details'])}"
         for item in evidence
     ]
-    return {"fraud_score": score, "verdict": verdict, "reasons": reasons}
+
+    evidence_by_signal = {item["signal"]: item["weight"] for item in evidence}
+    classification_scores = {
+        "Phishing": 5 + sum(
+            evidence_by_signal.get(signal, 0)
+            for signal in ("urgency", "credential", "links", "url_anomaly", "authentication_failure")
+        ),
+        "Impersonated": 4 + (18 if "reply_to_mismatch" in evidence_by_signal else 0),
+        "Suspicious": 8 + (14 if 30 <= score < 70 else 0),
+        "Legitimate": 8 + max(0, 45 - score),
+        "Fraud / BEC": 4 + evidence_by_signal.get("financial", 0) + (
+            8 if "reply_to_mismatch" in evidence_by_signal else 0
+        ),
+    }
+    if domain_intel and domain_intel.get("lookalike"):
+        classification_scores["Impersonated"] += 14
+
+    total = sum(classification_scores.values())
+    classification = []
+    remainder = 100
+    for index, (label, value) in enumerate(classification_scores.items()):
+        percentage = round(value / total * 100) if index < len(classification_scores) - 1 else remainder
+        remainder -= percentage
+        classification.append({"label": label, "percentage": percentage})
+
+    return {
+        "fraud_score": score,
+        "verdict": verdict,
+        "reasons": reasons,
+        "classification": classification,
+    }
 
 
 # ---------- 6. FORENSIC REPORT ----------
@@ -693,6 +772,8 @@ def build_report(filepath):
             "subject": parsed["subject"],
             "message_id": parsed["message_id"],
             "body": parsed["body"],
+            "inline_images": parsed["inline_images"],
+            "attachments": parsed["attachments"],
         },
         "authentication_check": auth_result,
         "domain_intelligence": domain_intel,

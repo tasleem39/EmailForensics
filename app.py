@@ -170,7 +170,7 @@ from flask import Flask, request, render_template_string, send_file
 {% if report %}
 <div class="grid"><section class="card"><h2>Analyze uploaded email</h2><p class="subtle">{{ filename }} · Last analyzed just now</p><div class="upload"><form action="/upload" method="post" enctype="multipart/form-data"><input type="file" name="emlfile" accept=".eml" required><button class="button" type="submit">Analyze new email</button></form></div></section>
 <section class="card"><h2>Threat assessment</h2><div class="score-row"><div class="score"><span>{{ report.threat_assessment.fraud_score }}</span></div><div><span class="badge">{{ report.threat_assessment.verdict }}</span><ul class="reasons">{% for r in report.threat_assessment.reasons[:3] %}<li>{{ r }}</li>{% endfor %}</ul></div></div><div style="margin-top:16px"><div style="display:flex;justify-content:space-between;color:#8096ae;font-size:11px;margin-bottom:7px"><span>Risk confidence</span><b style="color:#fff">{{ report.threat_assessment.fraud_score }} / 100</b></div><div class="meter"><i style="width:{{ report.threat_assessment.fraud_score }}%"></i></div></div></section>
-<section class="card"><h2>AI classification</h2><div class="distribution"><div class="donut"></div><div class="legend"><div><span><i class="dot" style="background:#f45c4d"></i>Phishing</span><b>46%</b></div><div><span><i class="dot" style="background:#f39a55"></i>Impersonated</span><b>22%</b></div><div><span><i class="dot" style="background:#d9c45c"></i>Suspicious</span><b>14%</b></div><div><span><i class="dot" style="background:#5fb7a2"></i>Legitimate</span><b>10%</b></div><div><span><i class="dot" style="background:#55728e"></i>Fraud / BEC</span><b>8%</b></div></div></div></section>
+<section class="card"><h2>AI classification</h2><div class="distribution"><div class="legend">{% for category in report.threat_assessment.classification %}<div><span><i class="dot" style="background:{{ classification_colors[loop.index0] }}"></i>{{ category.label }}</span><b>{{ category.percentage }}%</b></div>{% endfor %}</div></div></section>
 <section class="card"><h2>Why this category?</h2><p class="subtle">The classifier selected <strong style="color:#ff9b91">{{ report.threat_assessment.verdict }}</strong> because the message signals are explainable and auditable:</p><ul class="reasons">{% for r in report.threat_assessment.reasons %}<li>{{ r }}</li>{% endfor %}</ul></section>
 <section class="card full"><h2>Uploaded email preview</h2><div class="preview">From: {{ report.email_summary.from }}
 To: {{ report.email_summary.to or '—' }}
@@ -178,7 +178,9 @@ Reply-To: {{ report.email_summary.reply_to or '—' }}
 Subject: {{ report.email_summary.subject }}
 Message-ID: {{ report.email_summary.message_id }}
 
-{{ report.email_summary.body or 'Message body unavailable.' }}</div></section>
+{{ report.email_summary.body or 'Message body unavailable.' }}{% for image in report.email_summary.inline_images %}
+<img class="email-inline-image" src="{{ image.data_uri }}" alt="{{ image.filename }}">{% endfor %}{% for attachment in report.email_summary.attachments %}
+\n[Attachment: {{ attachment.filename }} ({{ attachment.content_type }}, {{ attachment.size }} bytes)]{% endfor %}</div></section>
 <section class="card full"><h2>Forensic intelligence</h2><div class="analysis-list"><a class="analysis-link" href="/results#authentication"><strong>Authentication Check</strong><span>SPF / DKIM / DMARC validation</span></a><a class="analysis-link" href="/results#mail-path"><strong>Origin & geolocation</strong><span>Mail path reconstruction and server hops</span></a><a class="analysis-link" href="/results#routing"><strong>Routing / IP intelligence</strong><span>ISP, ASN, proxy and hosting signals</span></a><a class="analysis-link" href="/results#ioc"><strong>Indicators of Compromise</strong><span>URLs, sender IP and domain evidence</span></a><a class="analysis-link" href="/results#graph"><strong>Graph-based attribution</strong><span>Sender domain ↔ reply-to ↔ origin IPs</span></a><a class="analysis-link" href="/results#conclusion"><strong>Forensic conclusion</strong><span>Recommended response actions</span></a></div></section>
 <section class="card full"><div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap"><div><h2 style="margin-bottom:5px">Forensic report ready</h2><p class="subtle">Export the complete evidence package with chain-of-custody metadata.</p></div><a class="button" href="/download-report">Download forensics report</a></div></section></div>
 {% else %}
@@ -386,7 +388,8 @@ PAGE = """
     {% if report %}
     <details>
       <summary class="email-preview-toggle">See email preview</summary>
-      <div class="email-preview-body">{{ report.email_summary.body or 'Message body unavailable.' }}</div>
+      <div class="email-preview-body">{{ report.email_summary.body or 'Message body unavailable.' }}{% for image in report.email_summary.inline_images %}<img class="email-inline-image" src="{{ image.data_uri }}" alt="{{ image.filename }}">{% endfor %}{% for attachment in report.email_summary.attachments %}
+    [Attachment: {{ attachment.filename }} ({{ attachment.content_type }}, {{ attachment.size }} bytes)]{% endfor %}</div>
     </details>
     {% endif %}
   </div>
@@ -424,11 +427,9 @@ PAGE = """
   <div class="card classification-card">
     <h2>AI Classification</h2>
     <div class="classification-bars">
-      <div class="classification-row"><span>Phishing</span><div class="classification-track"><div class="classification-fill" style="width:46%"></div></div><strong>46%</strong></div>
-      <div class="classification-row"><span>Impersonated</span><div class="classification-track"><div class="classification-fill" style="width:22%"></div></div><strong>22%</strong></div>
-      <div class="classification-row"><span>Suspicious</span><div class="classification-track"><div class="classification-fill" style="width:14%"></div></div><strong>14%</strong></div>
-      <div class="classification-row"><span>Legitimate</span><div class="classification-track"><div class="classification-fill" style="width:10%"></div></div><strong>10%</strong></div>
-      <div class="classification-row"><span>Fraud / BEC</span><div class="classification-track"><div class="classification-fill" style="width:8%"></div></div><strong>8%</strong></div>
+      {% for category in report.threat_assessment.classification %}
+      <div class="classification-row"><span>{{ category.label }}</span><div class="classification-track"><div class="classification-fill" style="width:{{ category.percentage }}%"></div></div><strong>{{ category.percentage }}%</strong></div>
+      {% endfor %}
     </div>
   </div>
 
@@ -1024,6 +1025,7 @@ THEME_CSS = """
   .email-preview-toggle::before { content: '▸'; display: inline-block; margin-right: 8px; color: #d97706; }
   details[open] .email-preview-toggle::before { content: '▾'; }
   .email-preview-body { max-height: 320px; overflow: auto; margin-top: 16px; white-space: pre-wrap; text-align: left; font: .88rem/1.7 Consolas, 'Segoe UI', monospace; color: #1f2937; background: rgba(255,255,255,.55); border: 1px solid rgba(146,64,14,.18); border-radius: 10px; padding: 14px; }
+  .email-inline-image { display: block; max-width: 100%; max-height: 360px; object-fit: contain; margin: 14px 0; border: 1px solid rgba(146,64,14,.18); border-radius: 8px; background: #fff; }
   .flow-card { padding: 20px; background: rgba(255,255,255,.88); backdrop-filter: blur(10px); border: 1px solid rgba(217,119,6,.2); border-radius: 12px; }
   .flow-card h2 { color: #92400e; }
   .flow-step-image { display: block; width: auto; max-width: 100%; max-height: 70px; object-fit: contain; margin: 0 auto 14px; }
@@ -1231,7 +1233,7 @@ THEME_CSS = """
     width: 170px;
     height: 170px;
     border-radius: 50%;
-    background: conic-gradient(#d97706 0 40%, #f59e0b 40% 60%, #f3c98b 60% 78%, #fef3c7 78% 92%, #a16207 92% 100%);
+    background: var(--accent);
     position: relative;
   }
 
@@ -1569,14 +1571,12 @@ OVERVIEW_PAGE = """
       <section class="panel class-panel">
         <h2>AI Classification</h2>
         <div class="chart-wrap">
-          <div class="donut"></div>
+          <div class="donut" style="background: conic-gradient({{ classification_gradient }});"></div>
         </div>
         <div class="legend">
-          <div class="legend-row"><div class="legend-left"><span class="dot" style="background:#d97706"></span>Phishing</div><strong>46%</strong></div>
-          <div class="legend-row"><div class="legend-left"><span class="dot" style="background:#f59e0b"></span>Impersonated</div><strong>22%</strong></div>
-          <div class="legend-row"><div class="legend-left"><span class="dot" style="background:#f3ca8c"></span>Suspicious</div><strong>14%</strong></div>
-          <div class="legend-row"><div class="legend-left"><span class="dot" style="background:#fef3c7"></span>Legitimate</div><strong>10%</strong></div>
-          <div class="legend-row"><div class="legend-left"><span class="dot" style="background:#a16207"></span>Fraud / BEC</div><strong>8%</strong></div>
+          {% for category in report.threat_assessment.classification %}
+          <div class="legend-row"><div class="legend-left"><span class="dot" style="background:{{ classification_colors[loop.index0] }}"></span>{{ category.label }}</div><strong>{{ category.percentage }}%</strong></div>
+          {% endfor %}
         </div>
       </section>
 
@@ -1599,7 +1599,9 @@ Reply-To: {{ report.email_summary.reply_to or '—' }}
 Subject: {{ report.email_summary.subject or '—' }}
 Message-ID: {{ report.email_summary.message_id or '—' }}
 
-{{ report.email_summary.body or 'Message body unavailable.' }}</div>
+{{ report.email_summary.body or 'Message body unavailable.' }}{% for image in report.email_summary.inline_images %}
+<img class="email-inline-image" src="{{ image.data_uri }}" alt="{{ image.filename }}">{% endfor %}{% for attachment in report.email_summary.attachments %}
+[Attachment: {{ attachment.filename }} ({{ attachment.content_type }}, {{ attachment.size }} bytes)]{% endfor %}</div>
       </section>
 
       <section class="panel intel-panel">
@@ -1686,6 +1688,17 @@ def score_color(score):
     elif score >= 30:
         return "#ffb020"
     return "#35d07f"
+
+
+def classification_gradient(categories):
+  colors = ["#d97706", "#f59e0b", "#f3ca8c", "#fef3c7", "#a16207"]
+  stops = []
+  position = 0
+  for color, category in zip(colors, categories):
+    next_position = position + category["percentage"]
+    stops.append(f"{color} {position}% {next_position}%")
+    position = next_position
+  return ", ".join(stops)
 
 
 @app.route("/", methods=["GET"])
@@ -1817,6 +1830,8 @@ def results():
     report=report,
     filename=filename,
     score_color=score_color(report["threat_assessment"]["fraud_score"]),
+    classification_colors=["#d97706", "#f59e0b", "#f3ca8c", "#fef3c7", "#a16207"],
+    classification_gradient=classification_gradient(report["threat_assessment"].get("classification", [])),
     hops_json=json.dumps(report.get("mail_path", []))
   )
 

@@ -1,0 +1,35 @@
+Delivered-To: alex.sample@gmail.com
+Received: by 2002:a05:6a10:2310:b0:300:1234:5678 with SMTP id x16csp1234567mail;
+        Wed, 09 Sep 2026 09:23:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFx...
+X-Received: by 2002:a17:902:8a89:b0:1f2:9876:5432 with SMTP id y9mr9876543210.12.1725898998;
+        Wed, 09 Sep 2026 09:23:18 -0700 (PDT)
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@accounts.google.com;
+       spf=pass (google.com: domain of no-reply@accounts.google.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=no-reply@accounts.google.com
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.69])
+        by mx.google.com with SMTPS id z10-20020a170902123400b001f298765432si12345678mail.210.2026.09.09.09.23.18
+        for <alex.sample@gmail.com>
+        (Google Transport Security);
+        Wed, 09 Sep 2026 09:23:18 -0700 (PDT)
+Received: from relay-internal.google.com (relay-internal.google.com [137.184.34.4])
+        by mail-sor-f41.google.com with SMTP id r54so1234567mail
+        for <alex.sample@gmail.com>; Wed, 09 Sep 2026 09:23:17 -0700 (PDT)
+From: Google Account Team <no-reply@accounts.google.com>
+To: alex.sample@gmail.com
+Subject: Security alert: New sign-in detected on your Google Account
+Date: Wed, 09 Sep 2026 16:23:17 GMT
+Message-ID: <CA+vM1z234567890abcdef@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+
+Your Google Account (alex.sample@gmail.com) was just signed in to from a new device.
+
+Details:
+- Connecting IP: 142.250.190.46
+- Ingestion Gateway IP: 209.85.220.41
+- Internal Relay IP: 172.217.16.14
+
+If this was you, you can safely ignore this email. If this wasn't you, please review your recent activity and secure your account immediately.
+
+The Google Accounts Team
