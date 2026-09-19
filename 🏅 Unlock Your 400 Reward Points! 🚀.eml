@@ -1,0 +1,344 @@
+Delivered-To: tasleems.ug.24.am@francisxavier.ac.in
+Received: by 2002:a17:505:1142:b0:1ea1:fd83:3693 with SMTP id sn2csp3083252njb;
+        Mon, 31 Aug 2026 08:22:16 -0700 (PDT)
+X-Received: by 2002:ac8:590d:0:b0:52f:ae2b:da0b with SMTP id d75a77b69052e-52fb942d67bmr327105381cf.16.1788189736739;
+        Mon, 31 Aug 2026 08:22:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788189736; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UnCZOMjNO0h9S+/KK86U1XK2vrhse1xf//ZSn6aLg6T6JPYHFDBccFGQON5OLrEXAJ
+         AkRoMRIgrkgH+jBSos04zvY2zfFKEQac7WVPMG6qxEba1mgdt5XiD/4ba7nbVip9fjo+
+         +bSgNzCs+PwqbSYRwJuXv4yTYNp7NhqWwRlY1fSLN3eRqw4wCVKX5FDr36c95e/3KljC
+         cPDYx2PlK2UK3LwpjAAe91F+w8ARaBLwySOOdCM7Jw83hqLIC/wet/4/uTjs66Zo0UZq
+         jn9JOSFG6OXWOIEx10zTxT56nTUvc6BOxf8ffTXxxoGX1uPejKY8s4FXUZIh7Pmp453n
+         tTzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=feedback-id:message-id:list-unsubscribe:list-unsubscribe-post
+         :mime-version:subject:to:reply-to:from:date:dkim-signature;
+        bh=QdlQN4b3T2u05hkHSQ221DKkWdP396AA8cGsD3tO1vc=;
+        fh=Ai/3EIs2T9g3rFnVYyXSgefKFf/fMQvAnnrlaCmjqVw=;
+        b=KZFwqhanb3KxZxBpDLaihhVyhbayF234tvuxyf2tOEE+yqR9DtAwZjbsXl2481d3Uz
+         a1KDWMeUGYlkZhvZYC6EoCvvwQWR62SsJhP1rEpEir8vaSSUy1MTl1mcl+gpDG1npBzz
+         xk710z1Ezr7furgdkEJjyAd+1U8l0iXQzsshs9ZhmUoJ3V2qjeqWGaAo53sYdNh1TFE1
+         k6QV4H0Ecr9YX/x3o5lQQG6LoF5FmUh/k+GaY0TQtn0xixJjOSvDfgng7rele2ElqOPe
+         RQlu7/DLnXlOVRtKXiK/P4jvi2bJA9qN/Lw4JEyGo1p8eC8mJTU0yOzrMPrZdDbmLR3f
+         fClw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b="SAqIxj/Y";
+       spf=pass (google.com: domain of 010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@amazonses.com designates 54.240.9.33 as permitted sender) smtp.mailfrom=010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@amazonses.com
+Return-Path: <010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@amazonses.com>
+Received: from a9-33.smtp-out.amazonses.com (a9-33.smtp-out.amazonses.com. [54.240.9.33])
+        by mx.google.com with ESMTPS id d75a77b69052e-52fbe5775bbsi102876101cf.115.2026.08.31.08.22.16
+        for <tasleems.ug.24.am@francisxavier.ac.in>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Aug 2026 08:22:16 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@amazonses.com designates 54.240.9.33 as permitted sender) client-ip=54.240.9.33;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b="SAqIxj/Y";
+       spf=pass (google.com: domain of 010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@amazonses.com designates 54.240.9.33 as permitted sender) smtp.mailfrom=010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1788189736;
+	h=Date:From:Reply-To:To:Subject:MIME-Version:Content-Type:List-Unsubscribe-Post:List-Unsubscribe:Message-ID:Feedback-ID;
+	bh=9oa2/VPeI3f5uJiR/zTwq5rPmtWO0MMrItEM/cylNog=;
+	b=SAqIxj/Y0mcCDpGq8aQajh5x1hF8Bn7Ik8hZmX0qGwZ7j2BjyWeKm0SEyHRTn9bW
+	LzWl0KRgYt/iyiPNfPoznN/U/+EXccko0ELrqW77Q1qXbSBJNQKXRBEn9iPzfhX2eqq
+	RMNdJBdzVU+TgBHNaIaR3u6rBrqrgaiHxFF1a4Sg=
+Date: Mon, 31 Aug 2026 15:22:15 +0000
+From: Reward Points <socialmedia@francisxavier.ac.in>
+Reply-To: socialmedia@francisxavier.ac.in
+To: tasleems.ug.24.am@francisxavier.ac.in
+Subject: =?UTF-8?Q?=F0=9F=8F=85_Unlock_Your_400_Reward_Points!_=F0=9F=9A=80?=
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_676431_1288883607.1788189736241"
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <https://www.postermywall.com/index.php/emailmarketing/unsubscribe?email=tasleems.ug.24.am%40francisxavier.ac.in&ml=veMZQzCGz7qQW1tQGS5d53xD2yySAPx7znzMACBmdh271kaez8OIRvQU0YQBcM8RiOgkEr__ASBgEi9i&huid=&source=OneClick>
+Message-ID: <010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>
+Feedback-ID: ::1.us-east-1.02yECow4OUzjYgesy/2Bw/AlYj82r0kE2U7jvd3ocnA=:AmazonSES
+X-SES-Outgoing: 2026.08.31-54.240.9.33
+
+------=_Part_676431_1288883607.1788189736241
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+                   Reward Points   Dear III Year Students,  The Reward Poin=
+ts Week is now open!  You can earn a total of 400 Reward Points through the=
+ following assessments:  GATE Preparation: 5 days =E2=80=93 200 Points GD P=
+reparation: 4 days =E2=80=93 200 Points (160 + 40 Points) The assessments w=
+ill be available every day from 6:00 p.m. to 9:00 a.m. the following day.  =
+Click the link below to know more about the assessments and participate.  M=
+ake the most of this opportunity and earn your Reward Points!   =C2=A0GATE =
+Preparation Assessments (You are asked to take a screenshot of the score)  =
+    Group Discussion Tips (You are asked to dowmload the answerscript on co=
+mpletion)      These two assessments are Open to ALL III year Students. No =
+separate Registration Required.   If you face any technical issues write to=
+ davidayling@francisxavier.ac.in            GATE Preparation Assessments   =
+             GATE Preparation Assessments                      =20
+
+=20
+
+------=_Part_676431_1288883607.1788189736241
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:schemas-microso=
+ft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:office"
+      style=3D"min-height: 100%; font-family: Helvetica Neue, Helvetica, Ar=
+ial, sans-serif; font-size: 14px; line-height: 150%; text-align: left; back=
+ground: #fff; "
+      lang=3D"en">
+<head>
+    <title></title>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+">
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width">
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+    <!--[if gte mso 9]>
+<xml>
+    <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<!--[if mso]>
+<style type=3D"text/css">
+    table {
+        border-collapse: collapse;
+        mso-table-lspace: 0;
+        mso-table-rspace: 0;
+    }
+
+    img {
+        -ms-interpolation-mode: bicubic;
+    }
+</style>
+<![endif]-->
+            <style type=3D"text/css">
+            @media screen and (max-width: 550px){.pmw-responsive-table .pmw=
+-responsive-cell{width:100% !important;display:block;}}
+@media screen and (max-width: 550px){.auto-width-cta{display:table !importa=
+nt;}}
+@media screen and (max-width: 550px){.pmw-responsive-table{min-height:10px =
+!important;}}
+@media screen and (max-width: 550px){.pmw-content-container{width:100% !imp=
+ortant;}}
+@media screen and (max-width: 550px){.pmw-media-type{width:100% !important;=
+}}
+@media screen and (max-width: 550px){.pmw-content-button{min-width:fit-cont=
+ent !important;}}
+@media screen and (max-width: 550px){#it2kc{width:100% !important;}}
+@media screen and (max-width: 768px) and (min-width: 551px){#i4yv2i{min-wid=
+th:auto !important;}}
+@media screen and (max-width: 550px){#i4yv2i{min-width:auto !important;}}  =
+      </style>
+        </head>
+<body style=3D"margin: 0 !important; -webkit-text-size-adjust:100%; -ms-tex=
+t-size-adjust:100%; width: 100% !important;">
+    <!--[if !mso]><!-->
+    <span class=3D"preheader"
+          style=3D"display: none !important; mso-hide: all; visibility: hid=
+den; opacity: 0; color: transparent; height: 0; width: 0;">Get ready for GA=
+TE and GD! Assessments open now for III year students.</span>
+    <div style=3D"display: none; mso-hide: all; max-height: 0px; overflow: =
+hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+    </div>
+    <!--<![endif]-->
+<table data-is-pmw-wrapper=3D"1" data-pmw-type=3D"postermywall-wrapper" cel=
+lspacing=3D"0" cellpadding=3D"0" bgcolor=3D"#FAFAFA" style=3D"box-sizing: b=
+order-box; background-color: #FAFAFA; height: 100%; width: 100%;" width=3D"=
+100%" height=3D"100%"><tbody data-is-pmw-tbody=3D"1" data-pmw-type=3D"poste=
+rmywall-tbody" style=3D"box-sizing: border-box;"><tr data-is-pmw-row=3D"1" =
+data-pmw-type=3D"postermywall-row" style=3D"box-sizing: border-box; height:=
+ 100%;"><td data-is-pmw-wrapper-cell=3D"1" data-pmw-type=3D"postermywall-wr=
+apper-cell" cellspacing=3D"0" align=3D"center" style=3D"box-sizing: border-=
+box; height: 100%;" height=3D"100%" bgcolor=3D"#FAFAFA"><!--[if mso]><table=
+ role=3D"presentation" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" b=
+order=3D"0"><tr><td align=3D"center"><center><table class=3D"pmw-outlook-gh=
+ost" role=3D"presentation" width=3D"660" style=3D"width:660px;" align=3D"ce=
+nter" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"><tr><td><![endif]-->=
+<table data-is-pmw-content=3D"1" data-pmw-type=3D"postermywall-content" cel=
+lspacing=3D"0" bgcolor=3D"#FFFFFF" class=3D"pmw-content-container" style=3D=
+"box-sizing:border-box;background-color:#FFFFFF;border-color:#FFFFFF;font-f=
+amily:Helvetica, sans-serif;margin-left:auto;margin-right:auto;height:100%;=
+min-width:min(600px, 100%);min-height:100%;max-width:920px;max-height:none;=
+vertical-align:top;width:80%;" width=3D"660" height=3D"100%" valign=3D"top"=
+><tbody data-is-pmw-tbody=3D"1" data-pmw-type=3D"postermywall-tbody" style=
+=3D"box-sizing: border-box;"><tr data-is-pmw-row=3D"1" data-pmw-type=3D"pos=
+termywall-row" style=3D"box-sizing: border-box;"><td data-pmw-type=3D"poste=
+rmywall-content-container" data-is-pmw-content-container=3D"1" align=3D"cen=
+ter" cellpadding=3D"0" style=3D"box-sizing: border-box; background: none; w=
+idth: 100%; margin: 0; padding: 0; height: 100%; min-height: 100%; max-heig=
+ht: none; vertical-align: top; mso-padding-alt: 0;" width=3D"660" height=3D=
+"100%" valign=3D"top" bgcolor=3D"#FFFFFF"><p data-pmw-type=3D"postermywall-=
+text" style=3D"color:#242424;display:block;padding:10px;margin:0;width:unse=
+t;box-sizing:border-box;word-break:break-word;overflow-wrap:break-word;lett=
+er-spacing:normal;mso-line-height-rule:exactly;line-height:18pt;font-family=
+:Helvetica, sans-serif;opacity:100%;border-color:#FFFFFF;text-align:center;=
+font-size:20px;mso-ansi-font-size:13.5pt;font-weight:bold;">Reward Points</=
+p><img data-is-pmw-image=3D"1" data-pmw-type=3D"postermywall-image" alt=3D"=
+Image" aria-hidden=3D"true" src=3D"https://d1csarkz8obe9u.cloudfront.net/up=
+loads/emails/046c70e06502b15a51d5ee22efb67411974683.jpg" id=3D"it2kc" style=
+=3D"box-sizing:border-box;width:104.16%;--mobile-width:100%;max-width:100%;=
+display:block;height:auto;border-radius:0;border-color:#FFFFFF;" width=3D"2=
+57" class=3D"pmw-media-type" height=3D"auto"><p data-pmw-type=3D"postermywa=
+ll-text" pmw-link-color=3D"#0000EE" style=3D"color:#242424;display:block;pa=
+dding:10px;margin:0;width:unset;box-sizing:border-box;word-break:break-word=
+;overflow-wrap:break-word;letter-spacing:normal;mso-line-height-rule:exactl=
+y;line-height:15pt;font-family:Helvetica, sans-serif;opacity:100%;border-co=
+lor:#FFFFFF;text-align:left;font-size:14px;mso-ansi-font-size:9.45pt;font-w=
+eight:normal;pmw-link-color:#0000EE;">Dear III Year Students,<br><br>The Re=
+ward Points Week is now open!<br><br>You can earn a total of 400 Reward Poi=
+nts through the following assessments:<br><br>GATE Preparation: 5 days &#x2=
+013; 200 Points<br>GD Preparation: 4 days &#x2013; 200 Points (160 + 40 Poi=
+nts)<br>The assessments will be available every day from 6:00 p.m. to 9:00 =
+a.m. the following day.<br><br>Click the link below to know more about the =
+assessments and participate.<br><br>Make the most of this opportunity and e=
+arn your Reward Points!<br><br><b style=3D"box-sizing: border-box;">&#xA0;G=
+ATE Preparation Assessments (You are asked to take a screenshot of the scor=
+e) </b><br><a data-is-pmw-link=3D"1" data-pmw-type=3D"postermywall-link" hr=
+ef=3D"https://fz387x3z.r.us-east-1.awstrack.me/L0/https:%2F%2Frewardsportal=
+.fxecdigital.org%2Fsemester-5%2Fgd-tips/1/010001a05869fac7-8c272c95-517f-4b=
+20-8324-5c44fa3e3670-000000/Kctcm2OfWhn32Jld66SZpmJLi0o=3D473" style=3D"box=
+-sizing:border-box;color:#0000EE;text-decoration:inherit;border-radius:0px;=
+font-family:Helvetica, sans-serif, Helvetica Neue, Helvetica, Arial, sans-s=
+erif;"><br><b style=3D"box-sizing: border-box;">Group Discussion Tips (You =
+are asked to dowmload the answerscript on completion)</b></a><br><br><br><b=
+r>These two assessments are Open to ALL III year Students. No separate Regi=
+stration Required. <br><br>If you face any technical issues write to davida=
+yling@francisxavier.ac.in</p><!--[if mso]><table style=3D"height: 0; paddin=
+g: 0; margin: 0; background-color: transparent;"></table><table width=3D"10=
+0%" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"><tr><td align=3D"cente=
+r"><v:roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" href=3D"https://rewardsportal.fxecdigital.=
+org/semester-6/gate-preparation" style=3D"height:50px;v-text-anchor:middle;=
+width:366px;" arcsize=3D"24%" stroked=3D"false" fillcolor=3D"#FD595B"> <w:a=
+nchorlock/> <center style=3D"color:#FFFFFF;font-family:Helvetica, sans-seri=
+f;text-decoration:none;font-size:12pt;font-weight:normal;font-style:normal;=
+">GATE Preparation Assessments</center> </v:roundrect></td></tr></table><ta=
+ble style=3D"height: 0; padding: 0; margin: 0; background-color: transparen=
+t;"></table><![endif]--><!--[if !mso]><!--><a data-is-pmw-button=3D"1" data=
+-pmw-type=3D"postermywall-button" id=3D"i4yv2i" data-url=3D"https://rewards=
+portal.fxecdigital.org/semester-6/gate-preparation" has-custom-url=3D"1" hr=
+ef=3D"https://fz387x3z.r.us-east-1.awstrack.me/L0/https:%2F%2Frewardsportal=
+.fxecdigital.org%2Fsemester-6%2Fgate-preparation/1/010001a05869fac7-8c272c9=
+5-517f-4b20-8324-5c44fa3e3670-000000/HBIFln5QaLuPp24euXahHGhNxDM=3D473" tar=
+get=3D"_blank" class=3D"pmw-content-button" style=3D"box-sizing: border-box=
+; background-color: #FD595B; border-radius: 12px; color: #FFFFFF; padding: =
+15px; font-size: 16px; letter-spacing: normal; line-height: 20px; margin: 0=
+ auto 0 auto; width: unset; white-space: break-spaces; vertical-align: midd=
+le; text-align: center; display: block; font-family: Helvetica, sans-serif;=
+ opacity: 100%; border-color: #FFFFFF; border-width: 0px; border-style: non=
+e; font-style: normal; font-weight: normal; text-decoration: none; button-w=
+idth: custom;"><table data-is-pmw-table=3D"1" data-pmw-type=3D"postermywall=
+-table" cellspacing=3D"0" style=3D"box-sizing:border-box;text-align:center;=
+width:100%;font-weight:inherit;font-style:inherit;color:inherit;font-size:i=
+nherit;line-height:inherit;" width=3D"100%" align=3D"inherit" border=3D"0">=
+<tr data-is-pmw-row=3D"1" data-pmw-type=3D"postermywall-row" style=3D"box-s=
+izing: border-box;"><td data-is-pmw-cell=3D"1" data-pmw-type=3D"postermywal=
+l-cell" class=3D"pmw-responsive-cell" style=3D"box-sizing:border-box;text-a=
+lign:center;width:auto;" width=3D"auto" align=3D"inherit" bgcolor=3D"#FD595=
+B"><p data-pmw-type=3D"postermywall-text" style=3D"box-sizing: border-box; =
+margin: 0; width: auto;">GATE Preparation Assessments</p></td></tr></table>=
+</a><!--<![endif]--></td></tr></tbody></table><!--[if mso]></td></tr></tabl=
+e></center></td></tr></table><![endif]--></td></tr></tbody></table><style>
+@media screen and (max-width: 768px) and (min-width: 551px) {
+  #i4yv2i {
+    min-width: auto !important;
+  }
+}
+@media screen and (max-width: 550px) {
+  .pmw-responsive-table .pmw-responsive-cell {
+    width: 100% !important;
+    display: block;
+  }
+
+  .pmw-content-container {
+    width: 100% !important;
+  }
+
+  .pmw-media-type {
+    width: 100% !important;
+  }
+
+  .pmw-content-button {
+    min-width: fit-content !important;
+  }
+
+  #it2kc {
+    width: 100% !important;
+  }
+
+  #i4yv2i {
+    min-width: auto !important;
+  }
+}
+</style>
+
+<div style=3D"background: #fff;padding: 8px 4px; color: #403F5D; text-align=
+: center; line-height: 1.4; font-weight: 300 !important; font-family: Robot=
+o,RobotoDraft,Helvetica, Arial, sans-serif !important; font-size: 12px;"
+     align=3D"left">
+    <!--                                            <br> Reason goes here <=
+br>-->
+           =20
+<div style=3D"text-align: center; padding: 16px 4px; background-color: #FAF=
+AFA;">
+    <p style=3D"margin: 0 0 8px 0; font-family: 'Inter', Helvetica, Arial, =
+sans-serif !important; font-size: 12px; line-height: 14px; font-weight: 400=
+; color: #858597;">
+        Francis Xavier Engineering College 103/G2 Bypass Road, Vannarpettai=
+, Tirunelveli, Tamil Nadu, IN 627003    </p>
+
+    <div style=3D"font-family: 'Inter', Helvetica, Arial, sans-serif !impor=
+tant; font-size: 12px; line-height: 14px; font-weight: 400; color: #858597;=
+">
+        <a style=3D"color: #858597; text-decoration: underline; font-weight=
+: 400;"
+           href=3D"https://fz387x3z.r.us-east-1.awstrack.me/L0/https:%2F%2F=
+www.postermywall.com%2Findex.php%2Femailmarketing%2Funsubscribe%3Femail=3Dt=
+asleems.ug.24.am@francisxavier.ac.in%26ml=3DveMZQzCGz7qQW1tQGS5d53xD2yySAPx=
+7znzMACBmdh271kaez8OIRvQU0YQBcM8RiOgkEr__ASBgEi9i%26huid=3De76256a08e782db3=
+94cbb54de463c32e%26source=3DEditor/1/010001a05869fac7-8c272c95-517f-4b20-83=
+24-5c44fa3e3670-000000/S3c8wu0l0IKSEZCPCsdXHA1dUsg=3D473">Unsubscribe</a>
+        <span style=3D"display: inline-block; width: 1px; height: 12px; bac=
+kground-color: #DCDCE1; margin: 0 8px; vertical-align: middle;"></span>
+        <a style=3D"color: #858597; text-decoration: underline; font-weight=
+: 400;"
+           href=3D"https://fz387x3z.r.us-east-1.awstrack.me/L0/https:%2F%2F=
+www.postermywall.com%2Findex.php%2Femailmarketing%2FviewEmail%2F1647d244267=
+27c6ddd8347d0ab106c07/1/010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e36=
+70-000000/ZjsTI6ZgYMPagYTb480YuQ-70Ho=3D473"
+        >View in browser</a>
+    </div>
+
+    </div>
+    <img alt=3D"" src=3D"https://fz387x3z.r.us-east-1.awstrack.me/I0/010001=
+a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000/T6Ows_hp_tvJCx2CSPE8=
+-kEhne0=3D473" style=3D"display: none; width: 1px; height: 1px;">
+</body>
+</html>
+------=_Part_676431_1288883607.1788189736241--
