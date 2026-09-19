@@ -206,7 +206,10 @@ def run_domain_intelligence(from_domain):
 # across millions of emails via graph queries. For the prototype, a local JSON
 # case history demonstrates the identical correlation concept honestly.
 
-CASE_HISTORY_FILE = "case_history.json"
+CASE_HISTORY_FILE = os.path.join(
+    os.environ.get("TMPDIR") or os.environ.get("TEMP") or os.environ.get("TMP") or os.path.dirname(os.path.abspath(__file__)),
+    "emailforensics-case-history.json",
+)
 
 
 def load_case_history():

@@ -1,0 +1,11 @@
+HTTP/1.1 302 Found
+Cache-Control: public, max-age=0, must-revalidate
+Content-Length: 203
+Content-Type: text/html; charset=utf-8
+Date: Wed, 16 Sep 2026 07:11:31 GMT
+Location: /results
+Server: Vercel
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Vercel-Cache: MISS
+X-Vercel-Id: bom1::iad1::f67s9-1789542690435-85272fd6382f
+

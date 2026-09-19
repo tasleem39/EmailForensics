@@ -785,14 +785,17 @@ PAGE = """
 
 import os
 import json
+import tempfile
 from flask import Flask, request, render_template_string, send_file, redirect
+from werkzeug.utils import secure_filename
 
 from email_forensics import build_report
 from pdf_report import generate_pdf_report
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "uploads"
-REPORT_FOLDER = "reports"
+RUNTIME_FOLDER = tempfile.gettempdir() if os.environ.get("VERCEL") else os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(RUNTIME_FOLDER, "emailforensics-uploads")
+REPORT_FOLDER = os.path.join(RUNTIME_FOLDER, "emailforensics-reports")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(REPORT_FOLDER, exist_ok=True)
 
@@ -1821,21 +1824,27 @@ def results():
 @app.route("/upload", methods=["POST"])
 def upload():
 
-    f = request.files["emlfile"]
+  f = request.files.get("emlfile")
+  if not f or not f.filename:
+    return "Please select an .eml file before analyzing.", 400
 
-    path = os.path.join(
-        UPLOAD_FOLDER,
-        f.filename
-    )
+  filename = secure_filename(f.filename)
+  if not filename.lower().endswith(".eml"):
+    return "Only .eml files are supported.", 400
 
-    f.save(path)
+  path = os.path.join(
+    UPLOAD_FOLDER,
+    filename
+  )
 
-    report = build_report(path)
+  f.save(path)
 
-    app.config["LAST_REPORT"] = report
-    app.config["LAST_FILENAME"] = f.filename
+  report = build_report(path)
 
-    return redirect("/results")
+  app.config["LAST_REPORT"] = report
+  app.config["LAST_FILENAME"] = filename
+
+  return redirect("/results")
 
 @app.route("/download-report")
 def download_report():
