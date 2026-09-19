@@ -1,0 +1,18 @@
+From: Microsoft Security <security-alert@example.invalid>
+To: test.user@example.com
+Subject: Urgent: Verify your account immediately
+
+Your Microsoft account was accessed from an unfamiliar device.
+
+Details:
+- Location: Unknown
+- IP address: 198.51.100.24
+- Device: Windows computer
+
+If this activity was not performed by you, verify your account immediately:
+
+http://account-security.example.invalid/verify
+
+Failure to verify your account within 24 hours may result in temporary suspension.
+
+Microsoft Account Security Team

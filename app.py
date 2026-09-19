@@ -410,6 +410,9 @@ PAGE = """
             <li>{{ r }}</li>
           {% endfor %}
         </ul>
+        {% if report.threat_assessment.model_available %}
+          <p class="footer-note" style="text-align:left; margin-top:12px;">ML spam probability: {{ (report.threat_assessment.model_probability * 100)|round(1) }}%</p>
+        {% endif %}
       </div>
     </div>
   </div>

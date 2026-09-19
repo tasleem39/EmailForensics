@@ -24,6 +24,7 @@ import email
 import ipaddress
 import hashlib
 import base64
+import joblib
 from datetime import datetime
 from email import policy
 from email.parser import BytesParser
@@ -31,6 +32,13 @@ from urllib.parse import urlparse
 
 import dns.resolver
 import requests
+
+
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "email_classifier.joblib")
+try:
+    CLASSIFIER_ARTIFACT = joblib.load(MODEL_PATH) if os.path.exists(MODEL_PATH) else None
+except Exception:
+    CLASSIFIER_ARTIFACT = None
 
 
 # ---------- 1. EMAIL PARSER ----------
@@ -615,6 +623,24 @@ URGENCY_WORDS = ["urgent", "immediately", "verify your account", "suspended",
 SUSPICIOUS_TLDS = [".xyz", ".top", ".click", ".zip", ".gq", ".tk"]
 
 
+def model_email_text(parsed):
+    fields = {
+        "sender": parsed.get("from", ""),
+        "receiver": parsed.get("to", ""),
+        "subject": parsed.get("subject", ""),
+        "body": parsed.get("body", ""),
+        "urls": " ".join(re.findall(r"https?://[^\s<>\"']+", parsed.get("body", ""))),
+    }
+    return "\n".join(f"{field}: {value}" for field, value in fields.items())
+
+
+def model_spam_probability(parsed):
+    if not CLASSIFIER_ARTIFACT:
+        return None
+    model = CLASSIFIER_ARTIFACT["model"]
+    return float(model.predict_proba([model_email_text(parsed)])[0][1])
+
+
 def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=None):
     body = parsed.get("body", "")
     raw_text = f"{parsed.get('subject', '')}\n{body}".lower()
@@ -687,7 +713,11 @@ def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=
             "details": [f"From={from_domain}", f"Reply-To={reply_domain}"],
         })
 
-    score = min(100, 10 + sum(item["weight"] for item in evidence))
+    model_probability = model_spam_probability(parsed)
+    if model_probability is None:
+        score = 0
+    else:
+        score = round(model_probability * 100)
     if score >= 70:
         verdict = "HIGH RISK — likely phishing/BEC"
     elif score >= 40:
@@ -701,32 +731,19 @@ def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=
         for item in evidence
     ]
 
-    evidence_by_signal = {item["signal"]: item["weight"] for item in evidence}
-    classification_scores = {
-        "Phishing": 5 + sum(
-            evidence_by_signal.get(signal, 0)
-            for signal in ("urgency", "credential", "links", "url_anomaly", "authentication_failure")
-        ),
-        "Impersonated": 4 + (18 if "reply_to_mismatch" in evidence_by_signal else 0),
-        "Suspicious": 8 + (14 if 30 <= score < 70 else 0),
-        "Legitimate": 8 + max(0, 45 - score),
-        "Fraud / BEC": 4 + evidence_by_signal.get("financial", 0) + (
-            8 if "reply_to_mismatch" in evidence_by_signal else 0
-        ),
-    }
-    if domain_intel and domain_intel.get("lookalike"):
-        classification_scores["Impersonated"] += 14
-
-    total = sum(classification_scores.values())
-    classification = []
-    remainder = 100
-    for index, (label, value) in enumerate(classification_scores.items()):
-        percentage = round(value / total * 100) if index < len(classification_scores) - 1 else remainder
-        remainder -= percentage
-        classification.append({"label": label, "percentage": percentage})
+    phishing_percentage = score
+    classification = [
+        {"label": "Phishing", "percentage": phishing_percentage},
+        {"label": "Impersonated", "percentage": 0},
+        {"label": "Suspicious", "percentage": 0},
+        {"label": "Legitimate", "percentage": 100 - phishing_percentage},
+        {"label": "Fraud / BEC", "percentage": 0},
+    ]
 
     return {
         "fraud_score": score,
+        "model_probability": round(model_probability, 4) if model_probability is not None else None,
+        "model_available": model_probability is not None,
         "verdict": verdict,
         "reasons": reasons,
         "classification": classification,

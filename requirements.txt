@@ -3,3 +3,6 @@ dnspython
 requests
 gunicorn
 reportlab
+pandas
+scikit-learn
+joblib
