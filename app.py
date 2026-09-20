@@ -805,6 +805,7 @@ from werkzeug.utils import secure_filename
 
 from email_forensics import build_report
 from pdf_report import generate_pdf_report
+import uuid
 
 app = Flask(__name__)
 RUNTIME_FOLDER = tempfile.gettempdir() if os.environ.get("VERCEL") else os.path.dirname(os.path.abspath(__file__))
@@ -1830,62 +1831,80 @@ def detail(section_key):
 #         hops_json = json.dumps(report.get("mail_path", []))
 #     return render_template_string(PAGE, report=report, score_color=color, hops_json=hops_json)
 
+# Global or persistent store for mapping Case IDs to generated reports
+REPORTS_STORE = {}
+
+# Set your secret API key in Vercel environment variables or hardcode for testing
+ANALYTICS_API_KEY = os.environ.get("ANALYTICS_API_KEY", "your_secret_key_123")
+
+
 @app.route("/results", methods=["GET"])
 def results():
-  report = app.config.get("LAST_REPORT")
-  filename = app.config.get("LAST_FILENAME", "Unknown")
+    case_id = request.args.get("caseId")
+    
+    # 1. Fetch report from specific caseId if provided, otherwise fallback to LAST_REPORT
+    if case_id and case_id in REPORTS_STORE:
+        report = REPORTS_STORE[case_id]
+        filename = report.get("email_summary", {}).get("filename", "api-upload.eml")
+    else:
+        report = app.config.get("LAST_REPORT")
+        filename = app.config.get("LAST_FILENAME", "Unknown")
 
-  if not report:
-    return redirect("/")
+    if not report:
+        return redirect("/")
 
-  return render_template_string(
-    PAGE,
-    report=report,
-    filename=filename,
-    score_color=score_color(report["threat_assessment"]["fraud_score"]),
-    classification_colors=["#d97706", "#f59e0b", "#f3ca8c", "#fef3c7", "#a16207"],
-    classification_gradient=classification_gradient(report["threat_assessment"].get("classification", [])),
-    hops_json=json.dumps(report.get("mail_path", []))
-  )
+    return render_template_string(
+        PAGE,
+        report=report,
+        filename=filename,
+        score_color=score_color(report["threat_assessment"]["fraud_score"]),
+        classification_colors=["#d97706", "#f59e0b", "#f3ca8c", "#fef3c7", "#a16207"],
+        classification_gradient=classification_gradient(report["threat_assessment"].get("classification", [])),
+        hops_json=json.dumps(report.get("mail_path", []))
+    )
 
 
 @app.route("/upload", methods=["POST"])
 def upload():
+    f = request.files.get("emlfile")
+    if not f or not f.filename:
+        return "Please select an .eml file before analyzing.", 400
 
-  f = request.files.get("emlfile")
-  if not f or not f.filename:
-    return "Please select an .eml file before analyzing.", 400
+    filename = secure_filename(f.filename)
+    if not filename.lower().endswith(".eml"):
+        return "Only .eml files are supported.", 400
 
-  filename = secure_filename(f.filename)
-  if not filename.lower().endswith(".eml"):
-    return "Only .eml files are supported.", 400
+    path = os.path.join(UPLOAD_FOLDER, filename)
+    f.save(path)
 
-  path = os.path.join(
-    UPLOAD_FOLDER,
-    filename
-  )
+    report = build_report(path)
+    case_id = report.get("campaign_graph", {}).get("campaign_id") or f"CASE-{uuid.uuid4().hex[:8].upper()}"
 
-  f.save(path)
+    # Save to case store and config
+    REPORTS_STORE[case_id] = report
+    app.config["LAST_REPORT"] = report
+    app.config["LAST_FILENAME"] = filename
 
-  report = build_report(path)
+    return redirect(f"/results?caseId={case_id}")
 
-  app.config["LAST_REPORT"] = report
-  app.config["LAST_FILENAME"] = filename
-
-  return redirect("/results")
 
 @app.route("/download-report")
 def download_report():
-    report = app.config.get("LAST_REPORT")
+    case_id = request.args.get("caseId")
+    
+    # 1. Look up report by caseId or fallback to LAST_REPORT
+    if case_id and case_id in REPORTS_STORE:
+        report = REPORTS_STORE[case_id]
+    else:
+        report = app.config.get("LAST_REPORT")
+
     if not report:
         return "No report available yet — analyze an email first.", 400
+
     out_path = os.path.join(REPORT_FOLDER, "forensic_report.pdf")
-    case_id = generate_pdf_report(report, out_path)
-    return send_file(out_path, as_attachment=True, download_name=f"{case_id}.pdf")
+    generated_case_id = generate_pdf_report(report, out_path)
+    return send_file(out_path, as_attachment=True, download_name=f"{generated_case_id}.pdf")
 
-
-# Set your secret API key in Vercel environment variables or hardcode for testing
-ANALYTICS_API_KEY = os.environ.get("ANALYTICS_API_KEY", "your_secret_key_123")
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze_email():
@@ -1911,14 +1930,21 @@ def analyze_email():
         ) as temp_file:
             temp_file.write(raw_email_text)
             temp_path = temp_file.name
+        
         report = build_report(temp_path)
-        report["email_summary"]["filename"] = secure_filename(
-            data.get("filename") or "api-upload.eml"
-        ) or "api-upload.eml"
+        filename = secure_filename(data.get("filename") or "api-upload.eml") or "api-upload.eml"
+        report["email_summary"]["filename"] = filename
 
-        # 4. Make the latest API analysis available to the existing dashboard.
+        # 4. Generate Case ID, save to REPORTS_STORE, and build dynamic report URL
+        case_id = report.get("campaign_graph", {}).get("campaign_id") or f"CASE-{uuid.uuid4().hex[:8].upper()}"
+        REPORTS_STORE[case_id] = report
+
+        # Update last report config for direct visits to /results
         app.config["LAST_REPORT"] = report
-        app.config["LAST_FILENAME"] = data.get("filename") or "api-upload.eml"
+        app.config["LAST_FILENAME"] = filename
+
+        host_url = request.host_url.rstrip('/')
+        report_url = f"{host_url}/results?caseId={case_id}"
 
         # 5. Return values from the completed forensic analysis.
         threat = report["threat_assessment"]
@@ -1927,7 +1953,8 @@ def analyze_email():
             "verdict": threat["verdict"],
             "category": threat.get("predicted_category"),
             "fraudScore": threat["fraud_score"],
-            "caseId": report["campaign_graph"]["campaign_id"],
+            "caseId": case_id,
+            "reportUrl": report_url,
             "originIP": report["origin_trace"].get("originating_ip"),
             "senderDomain": report["authentication_check"].get("from_domain"),
             "replyToDomain": report["email_correlation_graph"].get("current_reply_domain"),
@@ -1942,6 +1969,7 @@ def analyze_email():
     finally:
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
