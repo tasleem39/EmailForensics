@@ -800,7 +800,7 @@ PAGE = """
 import os
 import json
 import tempfile
-from flask import Flask, request, render_template_string, send_file, redirect
+from flask import Flask, request, render_template_string, send_file, redirect, jsonify
 from werkzeug.utils import secure_filename
 
 from email_forensics import build_report
@@ -1883,6 +1883,65 @@ def download_report():
     case_id = generate_pdf_report(report, out_path)
     return send_file(out_path, as_attachment=True, download_name=f"{case_id}.pdf")
 
+
+# Set your secret API key in Vercel environment variables or hardcode for testing
+ANALYTICS_API_KEY = os.environ.get("ANALYTICS_API_KEY", "your_secret_key_123")
+
+@app.route('/api/analyze', methods=['POST'])
+def analyze_email():
+    # 1. Authenticate the API request.
+    api_key = request.headers.get('x-api-key')
+    if api_key != ANALYTICS_API_KEY:
+        return jsonify({"error": "Unauthorized: Invalid API Key"}), 401
+
+    temp_path = None
+    try:
+        # 2. Validate and extract the raw RFC 822 email payload.
+        data = request.get_json()
+        if not isinstance(data, dict) or not isinstance(data.get('rawEmail'), str):
+            return jsonify({"error": "Bad Request: Missing rawEmail parameter"}), 400
+
+        raw_email_text = data['rawEmail']
+        if not raw_email_text.strip():
+            return jsonify({"error": "Bad Request: rawEmail cannot be empty"}), 400
+
+        # 3. Reuse the same forensic pipeline as the web upload route.
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".eml", delete=False, encoding="utf-8"
+        ) as temp_file:
+            temp_file.write(raw_email_text)
+            temp_path = temp_file.name
+        report = build_report(temp_path)
+        report["email_summary"]["filename"] = secure_filename(
+            data.get("filename") or "api-upload.eml"
+        ) or "api-upload.eml"
+
+        # 4. Make the latest API analysis available to the existing dashboard.
+        app.config["LAST_REPORT"] = report
+        app.config["LAST_FILENAME"] = data.get("filename") or "api-upload.eml"
+
+        # 5. Return values from the completed forensic analysis.
+        threat = report["threat_assessment"]
+        return jsonify({
+            "status": "success",
+            "verdict": threat["verdict"],
+            "category": threat.get("predicted_category"),
+            "fraudScore": threat["fraud_score"],
+            "caseId": report["campaign_graph"]["campaign_id"],
+            "originIP": report["origin_trace"].get("originating_ip"),
+            "senderDomain": report["authentication_check"].get("from_domain"),
+            "replyToDomain": report["email_correlation_graph"].get("current_reply_domain"),
+            "classification": threat.get("classification", []),
+            "reasons": threat.get("reasons", []),
+            "report": report,
+        }), 200
+
+    except Exception:
+        app.logger.exception("Email analysis API failed")
+        return jsonify({"error": "Internal Error: email analysis failed"}), 500
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            os.remove(temp_path)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
