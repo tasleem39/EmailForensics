@@ -652,5 +652,16 @@
     "subject": "Security alert: New sign-in detected on your Google Account",
     "message_id": "<CA+vM1z234567890abcdef@mail.gmail.com>",
     "timestamp": "2026-09-20T14:20:32.962803"
+  },
+  {
+    "case_id": "EMAIL-6771BE58E2EA",
+    "ip": "103.21.124.1",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T18:18:39.471780"
   }
 ]

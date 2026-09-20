@@ -814,6 +814,12 @@ REPORT_FOLDER = os.path.join(RUNTIME_FOLDER, "emailforensics-reports")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(REPORT_FOLDER, exist_ok=True)
 
+# Global or persistent store for mapping Case IDs to generated reports
+REPORTS_STORE = {}
+
+# Secret API key for Google Apps Script integration
+ANALYTICS_API_KEY = os.environ.get("ANALYTICS_API_KEY", "24001103844-g3istkphaa2d9r4v5h9j9ho4gr3oalqf.apps.googleusercontent.com")
+
 THEME_CSS = """
   :root {
     --bg: #f4efe9;
@@ -1837,12 +1843,11 @@ REPORTS_STORE = {}
 # Set your secret API key in Vercel environment variables or hardcode for testing
 ANALYTICS_API_KEY = os.environ.get("ANALYTICS_API_KEY", "your_secret_key_123")
 
-
 @app.route("/results", methods=["GET"])
 def results():
     case_id = request.args.get("caseId")
     
-    # 1. Fetch report from specific caseId if provided, otherwise fallback to LAST_REPORT
+    # Fetch report from specific caseId if provided, otherwise fallback to LAST_REPORT
     if case_id and case_id in REPORTS_STORE:
         report = REPORTS_STORE[case_id]
         filename = report.get("email_summary", {}).get("filename", "api-upload.eml")
@@ -1862,7 +1867,6 @@ def results():
         classification_gradient=classification_gradient(report["threat_assessment"].get("classification", [])),
         hops_json=json.dumps(report.get("mail_path", []))
     )
-
 
 @app.route("/upload", methods=["POST"])
 def upload():
@@ -1905,17 +1909,14 @@ def download_report():
     generated_case_id = generate_pdf_report(report, out_path)
     return send_file(out_path, as_attachment=True, download_name=f"{generated_case_id}.pdf")
 
-
 @app.route('/api/analyze', methods=['POST'])
 def analyze_email():
-    # 1. Authenticate the API request.
     api_key = request.headers.get('x-api-key')
     if api_key != ANALYTICS_API_KEY:
         return jsonify({"error": "Unauthorized: Invalid API Key"}), 401
 
     temp_path = None
     try:
-        # 2. Validate and extract the raw RFC 822 email payload.
         data = request.get_json()
         if not isinstance(data, dict) or not isinstance(data.get('rawEmail'), str):
             return jsonify({"error": "Bad Request: Missing rawEmail parameter"}), 400
@@ -1924,7 +1925,6 @@ def analyze_email():
         if not raw_email_text.strip():
             return jsonify({"error": "Bad Request: rawEmail cannot be empty"}), 400
 
-        # 3. Reuse the same forensic pipeline as the web upload route.
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".eml", delete=False, encoding="utf-8"
         ) as temp_file:
@@ -1935,18 +1935,33 @@ def analyze_email():
         filename = secure_filename(data.get("filename") or "api-upload.eml") or "api-upload.eml"
         report["email_summary"]["filename"] = filename
 
-        # 4. Generate Case ID, save to REPORTS_STORE, and build dynamic report URL
-        case_id = report.get("campaign_graph", {}).get("campaign_id") or f"CASE-{uuid.uuid4().hex[:8].upper()}"
+        # -------------------------------------------------------------
+        # FIX: Generate a strictly UNIQUE Case ID for every single scan
+        # -------------------------------------------------------------
+        unique_suffix = uuid.uuid4().hex[:8].upper()
+        
+        # If your analysis module returns a campaign ID, append a unique hash:
+        # e.g., "CAM-9141D266-A1B2C3D4"
+        raw_campaign_id = report.get("campaign_graph", {}).get("campaign_id")
+        if raw_campaign_id:
+            case_id = f"{raw_campaign_id}-{unique_suffix}"
+        else:
+            case_id = f"CASE-{unique_suffix}"
+
+        # Update the report payload with the unique case ID
+        if "campaign_graph" in report and isinstance(report["campaign_graph"], dict):
+            report["campaign_graph"]["campaign_id"] = case_id
+
+        # Save to memory store using the unique key
         REPORTS_STORE[case_id] = report
 
-        # Update last report config for direct visits to /results
+        # Fallbacks for legacy state
         app.config["LAST_REPORT"] = report
         app.config["LAST_FILENAME"] = filename
 
         host_url = request.host_url.rstrip('/')
         report_url = f"{host_url}/results?caseId={case_id}"
 
-        # 5. Return values from the completed forensic analysis.
         threat = report["threat_assessment"]
         return jsonify({
             "status": "success",
@@ -1969,7 +1984,6 @@ def analyze_email():
     finally:
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
