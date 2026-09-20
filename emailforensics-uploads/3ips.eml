@@ -1,0 +1,20 @@
+Received: from mail-out.example.org (mail-out.example.org [122.160.0.1])
+    by mx.destination.com (Postfix) with ESMTPS id 4SyX9s21z
+    for <user@destination.com>; Sun, 20 Sep 2026 14:00:00 +0000
+Received: from relay-south.example.net (relay-south.example.net [117.192.0.1])
+    by mail-out.example.org (Postfix) with ESMTP id 3qP01a9x
+    for <user@destination.com>; Sun, 20 Sep 2026 13:58:12 +0000
+Received: from relay-central.example.net (relay-central.example.net [115.240.0.1])
+    by relay-south.example.net (Postfix) with ESMTP id 2bO98z7y
+    for <user@destination.com>; Sun, 20 Sep 2026 13:57:30 +0000
+Received: from origin-west.example.com (origin-west.example.com [103.21.124.1])
+    by relay-central.example.net (Postfix) with ESMTP id 1aB23c4d
+    for <user@destination.com>; Sun, 20 Sep 2026 13:57:05 +0000
+From: Security Alert Notification <notice@example.com>
+To: User <user@destination.com>
+Subject: Security Verification Required
+Date: Sun, 20 Sep 2026 14:00:00 +0000
+Message-ID: <test-sample-12345@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Synthetic email test mapping 4 public IPs within India forming a Z-shaped routing path.

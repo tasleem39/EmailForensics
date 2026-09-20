@@ -282,12 +282,22 @@ PAGE = """
     margin-right: 6px; vertical-align: middle;
   }
   .graph-node {
-    padding: 10px 18px; border-radius: 8px; color: white; font-weight: 600;
-    white-space: nowrap; font-size: 13px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    padding: 10px 14px; border-radius: 8px; color: white; font-weight: 600;
+    white-space: normal; overflow-wrap: anywhere; word-break: break-word;
+    text-align: center; font-size: 13px; line-height: 1.35;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
   }
   .graph-edge-label {
     fill: #8fa2c7; font-size: 11px;
   }
+  .correlation-columns { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(150px, 1fr) minmax(220px, 1.4fr) minmax(150px, 1fr); gap: clamp(24px, 6vw, 90px); min-height: 500px; align-items: stretch; padding: 20px 28px; }
+  .correlation-column { display: flex; flex-direction: column; justify-content: space-around; align-items: center; gap: 12px; min-width: 0; }
+  .correlation-column .graph-node { width: min(100%, 230px); min-height: 42px; display: flex; align-items: center; justify-content: center; }
+  .graph-email { flex-direction: column; gap: 5px; }
+  .graph-email small { color: #b7c5d8; font-size: 10px; line-height: 1.35; font-weight: 400; }
+  .graph-column-label { color: #8fa2c7; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+  .correlation-campaign-column { justify-content: center; }
+  @media (max-width: 760px) { .correlation-columns { grid-template-columns: minmax(100px, 1fr) minmax(130px, 1.2fr) minmax(100px, 1fr); gap: 12px; padding: 12px 4px; } .graph-node { font-size: 11px; padding: 8px 10px; } }
   .ip-chip { display: inline-flex; align-items: center; gap: 8px; background: #0f1420; border: 1px solid #253150; border-radius: 6px; padding: 8px 12px; margin: 4px 6px 4px 0; font-size: 13px; }
   .ip-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
   .ip-badge.public { background: #1e8449; color: #d4f5e0; }
@@ -578,46 +588,36 @@ PAGE = """
     </div>
   </div>
 
-  <div class="card">
+  <div class="card wide-card">
     <h2>Campaign Correlation</h2>
-    {% if report.campaign_correlation %}
-    <table>
-      {% for match in report.campaign_correlation %}
-      <tr>
-        <td class="label fail">Match found</td>
-        <td>Shares {{ match.shared_on|join(' + ') }} with a previous email: "{{ match.subject }}" (analyzed {{ match.timestamp[:19] }})</td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% else %}
-    <table><tr><td class="pass">No overlap with any previously analyzed email — appears to be a new, isolated case.</td></tr></table>
-    {% endif %}
-  </div>
-
-  <div class="card" id="graph">
-    <h2>Fraud Campaign Intelligence</h2>
-    <table>
-      <tr><td class="label">Campaign ID</td><td>{{ report.campaign_graph.campaign_id }}</td></tr>
-      <tr><td class="label">Campaign Match Score</td><td>{{ report.campaign_graph.match_score }}%</td></tr>
-    </table>
-    <p class="footer-note" style="text-align:left; margin-top:4px;">
-      Match score reflects overlap (shared IP/domain) with previously analyzed cases — 0% means no prior case matched.
-    </p>
-
-    <h3 style="font-size:13px; color:#7ea0ff; margin-top:16px; text-transform:uppercase; letter-spacing:.05em;">Graph-Based Attribution</h3>
-    <p class="footer-note" style="text-align:left;">Relationship view: Sender Domain ↔ Reply-To Domain / Origin IPs</p>
-    <div id="graph-wrap" style="position:relative; height:280px; margin-top:10px;">
+    {% set correlation_graph = report.email_correlation_graph|default({'nodes': [], 'edges': [], 'matches': []}) %}
+    {% set sender_domain = correlation_graph.current_sender_domain or report.authentication_check.from_domain or "No sender domain present" %}
+    {% set origin_ip = correlation_graph.current_origin_ip or report.origin_trace.originating_ip or "No originating IP present" %}
+    {% set reply_domain = correlation_graph.current_reply_domain or "No Reply-To domain present" %}
+    <div id="graph-wrap" class="correlation-graph" style="position:relative; min-height:500px; margin-top:10px;">
       <svg id="graph-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></svg>
-      <div style="position:relative; height:100%; display:flex; justify-content:space-between; align-items:center; padding:0 20px;">
-        <div class="graph-node" id="node-sender" style="background:#1b3a5c;">{{ report.campaign_graph.sender_domain }}</div>
-        <div style="display:flex; flex-direction:column; justify-content:space-around; height:100%; gap:10px;">
-          <div class="graph-node graph-edge-target" data-label="Reply-To"
-               style="background:{{ '#8a5a1c' if not report.email_summary.reply_to else '#1b3a5c' }};">
-            {{ report.email_summary.reply_to.split('@')[-1].rstrip('>') if report.email_summary.reply_to else "No Reply-To domain" }}
+      <div class="correlation-columns">
+        <div class="correlation-column">
+          <div class="graph-column-label">Emails</div>
+          <div class="graph-node graph-email" id="node-sender" data-edge-keys="current" style="background:#1b3a5c;">
+            {{ report.email_summary.filename or "Uploaded email" }}
           </div>
-          {% for ip in report.campaign_graph.ips %}
-          <div class="graph-node graph-edge-target" data-label="origin/routing" style="background:#1b5e3a;">{{ ip }}</div>
+          {% for edge in correlation_graph.edges[:5] %}
+          {% set related = (correlation_graph.nodes|selectattr('id', 'equalto', edge.target)|list|first) %}
+          <div class="graph-node graph-email" data-edge-keys="{{ loop.index0 }}" style="background:#252d3a;">
+            {{ related.filename if related else edge.target }}
+          </div>
           {% endfor %}
+        </div>
+        <div class="correlation-column">
+          <div class="graph-column-label">Shared indicators</div>
+          {% for indicator in correlation_graph.graph_indicators|default([]) %}
+          <div class="graph-node graph-indicator" data-edge-keys="{{ indicator.edge_keys|join(',') }}" style="background:#252d3a;">{{ indicator.label }}</div>
+          {% endfor %}
+        </div>
+        <div class="correlation-column correlation-campaign-column">
+          <div class="graph-column-label">Campaign</div>
+          <div class="graph-node graph-campaign" id="node-campaign" style="background:#252d3a;">{{ report.campaign_graph.campaign_id }}</div>
         </div>
       </div>
     </div>
@@ -750,34 +750,44 @@ PAGE = """
 (function() {
   var wrap = document.getElementById('graph-wrap');
   var svg = document.getElementById('graph-svg');
-  var sender = document.getElementById('node-sender');
-  var targets = document.querySelectorAll('.graph-edge-target');
-  if (!wrap || !svg || !sender || targets.length === 0) return;
-
-  var wrapRect = wrap.getBoundingClientRect();
-  var senderRect = sender.getBoundingClientRect();
-  var sx = senderRect.right - wrapRect.left;
-  var sy = senderRect.top + senderRect.height / 2 - wrapRect.top;
+  var campaign = document.getElementById('node-campaign');
+  var indicators = document.querySelectorAll('.graph-indicator');
+  var emails = document.querySelectorAll('.graph-email');
+  if (!wrap || !svg || !campaign || indicators.length === 0) return;
 
   var svgns = "http://www.w3.org/2000/svg";
-  targets.forEach(function(t) {
-    var r = t.getBoundingClientRect();
-    var tx = r.left - wrapRect.left;
-    var ty = r.top + r.height / 2 - wrapRect.top;
+  var wrapRect = wrap.getBoundingClientRect();
 
-    var line = document.createElementNS(svgns, "line");
-    line.setAttribute("x1", sx); line.setAttribute("y1", sy);
-    line.setAttribute("x2", tx); line.setAttribute("y2", ty);
-    line.setAttribute("stroke", "#3a4a75"); line.setAttribute("stroke-width", "1.5");
-    svg.appendChild(line);
+  function center(element) {
+    var rect = element.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2 - wrapRect.left, y: rect.top + rect.height / 2 - wrapRect.top };
+  }
 
-    var label = document.createElementNS(svgns, "text");
-    label.setAttribute("x", (sx + tx) / 2);
-    label.setAttribute("y", (sy + ty) / 2 - 6);
-    label.setAttribute("class", "graph-edge-label");
-    label.setAttribute("text-anchor", "middle");
-    label.textContent = t.getAttribute("data-label");
-    svg.appendChild(label);
+  function curve(from, to, color) {
+    var path = document.createElementNS(svgns, "path");
+    var bend = Math.max(35, Math.abs(to.x - from.x) * 0.42);
+    path.setAttribute("d", "M " + from.x + " " + from.y + " C " + (from.x + bend) + " " + from.y + ", " + (to.x - bend) + " " + to.y + ", " + to.x + " " + to.y);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", color);
+    path.setAttribute("stroke-width", "1.4");
+    path.setAttribute("marker-end", "url(#graph-arrow)");
+    svg.appendChild(path);
+  }
+
+  var defs = document.createElementNS(svgns, "defs");
+  defs.innerHTML = '<marker id="graph-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#247da8"></path></marker>';
+  svg.appendChild(defs);
+
+  indicators.forEach(function(indicator) {
+    var keys = (indicator.getAttribute('data-edge-keys') || '').split(',');
+    var target = center(indicator);
+    emails.forEach(function(email) {
+      var emailKeys = (email.getAttribute('data-edge-keys') || '').split(',');
+      if (keys.some(function(key) { return emailKeys.indexOf(key) !== -1; })) {
+        curve(center(email), target, '#247da8');
+      }
+    });
+    curve(target, center(campaign), '#247da8');
   });
 })();
 </script>

@@ -3,10 +3,10 @@ AI-Powered Email Threat Detection, GeoLocation and Forensic Intelligence Platfor
 Prototype (small-scale) — SIH 2026, PS ID 26106, Team Tech Titans
 
 This is a scoped-down but REAL working version of the pipeline described in the
-idea deck. It does not use BERT/Neo4j/Rust yet (those are the production upgrade
-path) — it uses lightweight, honest equivalents so every step here actually runs:
+idea deck. It does not use BERT/Neo4j/Rust yet (those are the production
+upgrade path) — it uses lightweight, honest equivalents so every step here actually runs:
 
-  1. Email Parser        -> Python's built-in email library
+    1. Email Parser        -> Python's built-in email library
   2. Auth Check           -> DNS TXT lookups for SPF/DMARC + DKIM signature presence
   3. Origin Extraction    -> Regex walk of Received: header chain, first external hop
   4. Geo & Attribution    -> Free IP geolocation API (ip-api.com)
@@ -27,6 +27,7 @@ import base64
 import joblib
 from datetime import datetime
 from email import policy
+from email.utils import parseaddr
 from email.parser import BytesParser
 from urllib.parse import urlparse
 
@@ -124,12 +125,10 @@ def get_attachment_metadata(msg):
         })
     return attachments
 
-
-# ---------- 2. AUTH CHECK (SPF / DMARC / DKIM) ----------
-
 def extract_domain(address_field):
-    match = re.search(r"@([\w\.-]+)", address_field)
-    return match.group(1).lower() if match else None
+    address = parseaddr(address_field or "")[1]
+    match = re.search(r"@([^\s>]+)$", address)
+    return match.group(1).lower().rstrip(".") if match else None
 
 
 def check_spf(domain):
@@ -264,8 +263,8 @@ def run_domain_intelligence(from_domain):
 # case history demonstrates the identical correlation concept honestly.
 
 CASE_HISTORY_FILE = os.path.join(
-    os.environ.get("TMPDIR") or os.environ.get("TEMP") or os.environ.get("TMP") or os.path.dirname(os.path.abspath(__file__)),
-    "emailforensics-case-history.json",
+    os.path.dirname(os.path.abspath(__file__)),
+    "case_history.json",
 )
 
 
@@ -287,32 +286,137 @@ def save_case_history(history):
         pass
 
 
-def correlate_with_history(current_ip, current_domain, subject):
+def _domain_from_field(value):
+    return extract_domain(value) if value else None
+
+
+def _url_domains(body):
+    domains = []
+    for url in re.findall(r"https?://[^\s<>\"']+", body or ""):
+        host = (urlparse(url.rstrip(".,);]}")).hostname or "").lower()
+        if host and host not in domains:
+            domains.append(host)
+    return domains
+
+
+def _case_indicators(current_ip, parsed):
+    return {
+        "ip": current_ip,
+        "domain": _domain_from_field(parsed.get("from")),
+        "reply_domain": _domain_from_field(parsed.get("reply_to")),
+        "url_domains": _url_domains(parsed.get("body", "")),
+    }
+
+
+def _correlation_score(current, previous):
+    shared = []
+    if current.get("ip") and current.get("ip") == previous.get("ip"):
+        shared.append(("originating IP", 30))
+    if current.get("domain") and current.get("domain") == previous.get("domain"):
+        shared.append(("sender domain", 20))
+    if current.get("reply_domain") and current.get("reply_domain") == previous.get("reply_domain"):
+        shared.append(("Reply-To domain", 15))
+    shared_urls = sorted(set(current.get("url_domains", [])) & set(previous.get("url_domains", [])))
+    if shared_urls:
+        shared.append((f"URL domain ({shared_urls[0]})", 20))
+    return min(100, sum(weight for _, weight in shared)), [label for label, _ in shared]
+
+
+def correlate_with_history(current_ip, parsed):
     history = load_case_history()
+    current = _case_indicators(current_ip, parsed)
+    current_id = "EMAIL-" + hashlib.sha256(
+        f"{parsed.get('message_id', '')}|{parsed.get('subject', '')}|{datetime.utcnow().isoformat()}".encode()
+    ).hexdigest()[:12].upper()
     matches = []
-    for case in history:
-        shared = []
-        if current_ip and case.get("ip") == current_ip:
-            shared.append("originating IP")
-        if current_domain and case.get("domain") == current_domain:
-            shared.append("sender domain")
-        if shared:
+    for index, case in enumerate(history):
+        score, shared = _correlation_score(current, case)
+        if score:
             matches.append({
+                "case_id": case.get("case_id", f"EMAIL-LEGACY-{index + 1}"),
                 "subject": case.get("subject"),
                 "timestamp": case.get("timestamp"),
                 "shared_on": shared,
+                "score": score,
             })
 
-    # record the current case for future correlation, regardless of outcome
     history.append({
-        "ip": current_ip,
-        "domain": current_domain,
-        "subject": subject,
+        "case_id": current_id,
+        **current,
+        "filename": parsed.get("filename") or parsed.get("subject") or "Uploaded email",
+        "subject": parsed.get("subject", ""),
+        "message_id": parsed.get("message_id", ""),
         "timestamp": datetime.utcnow().isoformat(),
     })
     save_case_history(history)
 
-    return matches
+    nodes = [{
+        "id": case.get("case_id", f"EMAIL-LEGACY-{index + 1}"),
+        "filename": case.get("filename") or case.get("subject") or "Previous email",
+        "subject": case.get("subject") or "No subject",
+        "domain": case.get("domain") or "Unknown domain",
+        "ip": case.get("ip") or "Unknown IP",
+        "timestamp": case.get("timestamp"),
+        "current": case.get("case_id") == current_id,
+    } for index, case in enumerate(history[-100:], start=max(0, len(history) - 100))]
+    edges = []
+    for index, case in enumerate(history):
+        if case.get("case_id") == current_id:
+            continue
+        score, shared = _correlation_score(current, case)
+        if score:
+            edges.append({
+                "source": current_id,
+                "target": case.get("case_id", f"EMAIL-LEGACY-{index + 1}"),
+                "score": score,
+                "shared_on": shared,
+            })
+    sorted_edges = sorted(edges, key=lambda edge: edge["score"], reverse=True)[:50]
+    graph_indicators = []
+    indicator_index = {}
+
+    def add_graph_indicator(label, edge_key):
+        if not label:
+            return
+        if label not in indicator_index:
+            indicator_index[label] = len(graph_indicators)
+            graph_indicators.append({"label": label, "edge_keys": [edge_key]})
+        elif edge_key not in graph_indicators[indicator_index[label]]["edge_keys"]:
+            graph_indicators[indicator_index[label]]["edge_keys"].append(edge_key)
+
+    add_graph_indicator(f"Sender: {current.get('domain') or 'No sender domain present'}", "current")
+    add_graph_indicator(f"Origin IP: {current.get('ip') or 'No originating IP present'}", "current")
+    add_graph_indicator(f"Reply-To: {current.get('reply_domain') or 'No Reply-To domain present'}", "current")
+    if current.get("url_domains"):
+        for url_domain in current["url_domains"]:
+            add_graph_indicator(f"URL domain: {url_domain}", "current")
+    else:
+        add_graph_indicator("No URL domain present", "current")
+
+    for edge_index, edge in enumerate(sorted_edges[:5]):
+        for shared in edge["shared_on"]:
+            if shared == "originating IP":
+                label = f"Origin IP: {current.get('ip') or 'No originating IP present'}"
+            elif shared == "sender domain":
+                label = f"Sender: {current.get('domain') or 'No sender domain present'}"
+            elif shared == "Reply-To domain":
+                label = f"Reply-To: {current.get('reply_domain') or 'No Reply-To domain present'}"
+            elif shared.startswith("URL domain (") and shared.endswith(")"):
+                label = f"URL domain: {shared[12:-1]}"
+            else:
+                label = shared
+            add_graph_indicator(label, edge_index)
+    return {
+        "current_email_id": current_id,
+        "current_sender_domain": current.get("domain"),
+        "current_origin_ip": current.get("ip"),
+        "current_reply_domain": current.get("reply_domain"),
+        "current_url_domains": current.get("url_domains", []),
+        "graph_indicators": graph_indicators,
+        "nodes": nodes,
+        "edges": sorted_edges,
+        "matches": sorted(matches, key=lambda item: item["score"], reverse=True)[:20],
+    }
 
 
 def get_reverse_dns(ip):
@@ -531,9 +635,19 @@ def build_campaign_graph(auth_result, origin_trace, correlation):
 
 # ---------- 3. ORIGIN EXTRACTION ----------
 
-IP_REGEX = re.compile(
-    r"\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d?\d)\b"
-)
+IP_TOKEN_REGEX = re.compile(r"(?<![\w:])[0-9A-Fa-f:.]+(?![\w:])")
+
+
+def extract_ips(header):
+    ips = []
+    for token in IP_TOKEN_REGEX.findall(str(header)):
+        try:
+            ipaddress.ip_address(token)
+            if token not in ips:
+                ips.append(token)
+        except ValueError:
+            continue
+    return ips
 
 
 def is_private_ip(ip):
@@ -548,7 +662,7 @@ def extract_all_ips_tagged(received_headers):
     used to show the full raw extraction, not just the usable public candidates."""
     seen = []
     for header in received_headers:
-        for ip in IP_REGEX.findall(str(header)):
+        for ip in extract_ips(header):
             if ip not in [x["ip"] for x in seen]:
                 seen.append({"ip": ip, "tag": "PRIVATE / NON-ROUTABLE" if is_private_ip(ip) else "PUBLIC"})
     return seen
@@ -563,7 +677,7 @@ def extract_originating_ip(received_headers):
     """
     candidates = []
     for header in reversed(received_headers):
-        ips = IP_REGEX.findall(str(header))
+        ips = extract_ips(header)
         for ip in ips:
             if not is_private_ip(ip):
                 candidates.append(ip)
@@ -634,11 +748,20 @@ def model_email_text(parsed):
     return "\n".join(f"{field}: {value}" for field, value in fields.items())
 
 
-def model_spam_probability(parsed):
+MODEL_CLASSES = ("legitimate", "suspicious", "impersonated", "phishing", "fraud")
+
+
+def model_classification(parsed):
     if not CLASSIFIER_ARTIFACT:
         return None
     model = CLASSIFIER_ARTIFACT["model"]
-    return float(model.predict_proba([model_email_text(parsed)])[0][1])
+    probabilities = model.predict_proba([model_email_text(parsed)])[0]
+    classes = getattr(model, "classes_", CLASSIFIER_ARTIFACT.get("classes", []))
+    result = {label: 0.0 for label in MODEL_CLASSES}
+    for label, probability in zip(classes, probabilities):
+        if str(label) in result:
+            result[str(label)] = float(probability)
+    return result
 
 
 def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=None):
@@ -713,15 +836,21 @@ def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=
             "details": [f"From={from_domain}", f"Reply-To={reply_domain}"],
         })
 
-    model_probability = model_spam_probability(parsed)
-    if model_probability is None:
-        score = 0
+    model_probabilities = model_classification(parsed)
+    heuristic_score = min(100, sum(item["weight"] for item in evidence))
+    if model_probabilities is None:
+        score = heuristic_score
+        predicted_category = "suspicious" if score >= 40 else "legitimate"
     else:
-        score = round(model_probability * 100)
+        predicted_category = max(model_probabilities, key=model_probabilities.get)
+        score = round((1 - model_probabilities.get("legitimate", 0.0)) * 100)
+        # Keep strong, independently observed header/content signals from being
+        # hidden by an uncertain text model prediction.
+        score = max(score, round(heuristic_score * 0.6))
     if score >= 70:
-        verdict = "HIGH RISK — likely phishing/BEC"
+        verdict = f"HIGH RISK — likely {predicted_category}"
     elif score >= 40:
-        verdict = "SUSPICIOUS — needs analyst review"
+        verdict = f"SUSPICIOUS — likely {predicted_category}"
     else:
         verdict = "LOW RISK"
 
@@ -731,19 +860,28 @@ def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=
         for item in evidence
     ]
 
-    phishing_percentage = score
+    display_labels = {
+        "phishing": "Phishing",
+        "impersonated": "Impersonated",
+        "suspicious": "Suspicious",
+        "legitimate": "Legitimate",
+        "fraud": "Fraud / BEC",
+    }
+    if model_probabilities is None:
+        model_probabilities = {label: 0.0 for label in MODEL_CLASSES}
+        model_probabilities[predicted_category] = score / 100
+        model_probabilities["legitimate"] = max(0.0, 1 - score / 100)
     classification = [
-        {"label": "Phishing", "percentage": phishing_percentage},
-        {"label": "Impersonated", "percentage": 0},
-        {"label": "Suspicious", "percentage": 0},
-        {"label": "Legitimate", "percentage": 100 - phishing_percentage},
-        {"label": "Fraud / BEC", "percentage": 0},
+        {"label": display_labels[label], "percentage": round(model_probabilities[label] * 100, 1)}
+        for label in ("phishing", "impersonated", "suspicious", "legitimate", "fraud")
     ]
 
     return {
         "fraud_score": score,
-        "model_probability": round(model_probability, 4) if model_probability is not None else None,
-        "model_available": model_probability is not None,
+        "model_probability": round(1 - model_probabilities.get("legitimate", 0.0), 4) if model_probabilities else None,
+        "model_probabilities": model_probabilities,
+        "predicted_category": predicted_category,
+        "model_available": model_probabilities is not None,
         "verdict": verdict,
         "reasons": reasons,
         "classification": classification,
@@ -754,11 +892,13 @@ def score_email(parsed, auth_result, geo_result, domain_intel=None, correlation=
 
 def build_report(filepath):
     parsed = parse_email(filepath)
+    parsed["filename"] = os.path.basename(filepath)
     auth_result = run_auth_check(parsed)
     origin_ip, all_candidates = extract_originating_ip(parsed["received_headers"])
     geo_result = geolocate_ip(origin_ip)
     domain_intel = run_domain_intelligence(auth_result.get("from_domain"))
-    correlation = correlate_with_history(origin_ip, auth_result.get("from_domain"), parsed["subject"])
+    correlation_graph = correlate_with_history(origin_ip, parsed)
+    correlation = correlation_graph["matches"]
     threat_result = score_email(parsed, auth_result, geo_result, domain_intel, correlation)
 
     reverse_dns = get_reverse_dns(origin_ip) if origin_ip else None
@@ -783,6 +923,7 @@ def build_report(filepath):
 
     report = {
         "email_summary": {
+            "filename": os.path.basename(filepath),
             "from": parsed["from"],
             "to": parsed["to"],
             "reply_to": parsed["reply_to"],
@@ -801,6 +942,7 @@ def build_report(filepath):
         "threat_techniques": techniques,
         "iocs": iocs,
         "campaign_correlation": correlation,
+        "email_correlation_graph": correlation_graph,
         "campaign_graph": campaign_graph,
         "threat_assessment": threat_result,
         "recommended_actions": actions,

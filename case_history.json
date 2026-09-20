@@ -346,5 +346,311 @@
     "domain": "francisxavier.ac.in",
     "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
     "timestamp": "2026-09-16T06:39:04.497893"
+  },
+  {
+    "case_id": "EMAIL-F73F2A8A79B2",
+    "ip": null,
+    "domain": "francisxavier.ac.in",
+    "reply_domain": null,
+    "url_domains": [],
+    "subject": "",
+    "message_id": "<CAFCGwBd9pOopHoJWty+Rn2f+4nRhk4ooxQJfp9cH4e_wiTxuHQ@mail.gmail.com>",
+    "timestamp": "2026-09-20T13:10:39.223911"
+  },
+  {
+    "case_id": "EMAIL-49FCF6EB61AC",
+    "ip": null,
+    "domain": "francisxavier.ac.in",
+    "reply_domain": null,
+    "url_domains": [],
+    "subject": "",
+    "message_id": "<CAFCGwBd9pOopHoJWty+Rn2f+4nRhk4ooxQJfp9cH4e_wiTxuHQ@mail.gmail.com>",
+    "timestamp": "2026-09-20T13:15:13.228581"
+  },
+  {
+    "case_id": "EMAIL-64EA2654A48B",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:18:37.538063"
+  },
+  {
+    "case_id": "EMAIL-8FC0142B0696",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:21:37.166615"
+  },
+  {
+    "case_id": "EMAIL-5C73C2207571",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:27:45.839817"
+  },
+  {
+    "case_id": "EMAIL-9D4A1475F336",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "Unlock_Your_400_Reward_Points_.eml",
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:30:33.784687"
+  },
+  {
+    "case_id": "EMAIL-1B4E9C2ED178",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "Unlock_Your_400_Reward_Points_.eml",
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:35:09.989031"
+  },
+  {
+    "case_id": "EMAIL-446C9921E5D5",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "Unlock_Your_400_Reward_Points_.eml",
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:37:25.170889"
+  },
+  {
+    "case_id": "EMAIL-9F3BC85010D1",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "Unlock_Your_400_Reward_Points_.eml",
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:41:08.395430"
+  },
+  {
+    "case_id": "EMAIL-A49BA1B1E28D",
+    "ip": null,
+    "domain": "example.invalid",
+    "reply_domain": null,
+    "url_domains": [
+      "account-security.example.invalid"
+    ],
+    "filename": "test-phish.eml",
+    "subject": "Urgent: Verify your account immediately",
+    "message_id": "",
+    "timestamp": "2026-09-20T13:41:48.629307"
+  },
+  {
+    "case_id": "EMAIL-CF37C5664E83",
+    "ip": "54.240.9.112",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "CIVI-FUTURA_2K26_Awaits_Seize_Your_Chance.eml",
+    "subject": "CIVI-FUTURA 2K26 Awaits! \ud83c\udf89 Seize Your Chance!",
+    "message_id": "<010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:42:44.893679"
+  },
+  {
+    "case_id": "EMAIL-6431213CE214",
+    "ip": "54.240.9.112",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "CIVI-FUTURA_2K26_Awaits_Seize_Your_Chance.eml",
+    "subject": "CIVI-FUTURA 2K26 Awaits! \ud83c\udf89 Seize Your Chance!",
+    "message_id": "<010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:45:04.201610"
+  },
+  {
+    "case_id": "EMAIL-B6889AE07410",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "Unlock_Your_400_Reward_Points_.eml",
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:45:11.739290"
+  },
+  {
+    "case_id": "EMAIL-FB594CF271F5",
+    "ip": "89.144.44.2",
+    "domain": null,
+    "reply_domain": "gmail.com",
+    "url_domains": [
+      "thebandalisty.com"
+    ],
+    "filename": "sample-10.eml",
+    "subject": "Microsoft account unusual signin activity",
+    "message_id": "<032672b4-77ca-42f8-a036-9711e91bd1f3@DB8EUR06FT032.eop-eur06.prod.protection.outlook.com>",
+    "timestamp": "2026-09-20T13:45:41.046930"
+  },
+  {
+    "case_id": "EMAIL-EDA58DCF5C7F",
+    "ip": "137.184.34.4",
+    "domain": "accounts.google.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "sampleMail_1_1.eml",
+    "subject": "Security alert: New sign-in detected on your Google Account",
+    "message_id": "<CA+vM1z234567890abcdef@mail.gmail.com>",
+    "timestamp": "2026-09-20T13:47:06.481488"
+  },
+  {
+    "case_id": "EMAIL-BB35A4AEA351",
+    "ip": "54.240.9.33",
+    "domain": "francisxavier.ac.in",
+    "reply_domain": "francisxavier.ac.in",
+    "url_domains": [],
+    "filename": "Unlock_Your_400_Reward_Points_.eml",
+    "subject": "\ud83c\udfc5 Unlock Your 400 Reward Points! \ud83d\ude80",
+    "message_id": "<010001a05869fac7-8c272c95-517f-4b20-8324-5c44fa3e3670-000000@email.amazonses.com>",
+    "timestamp": "2026-09-20T13:49:15.571631"
+  },
+  {
+    "case_id": "EMAIL-D8E82F6E4148",
+    "ip": null,
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [
+      "example.com"
+    ],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T13:59:54.017437"
+  },
+  {
+    "case_id": "EMAIL-86506D4589FE",
+    "ip": "104.16.132.229",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [
+      "example.com"
+    ],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T14:01:29.456259"
+  },
+  {
+    "case_id": "EMAIL-5AD856CE502B",
+    "ip": "133.242.180.100",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T14:04:00.503377"
+  },
+  {
+    "case_id": "EMAIL-5E27A1821AC2",
+    "ip": "102.130.120.1",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T14:06:07.675356"
+  },
+  {
+    "case_id": "EMAIL-A2144108CB0F",
+    "ip": "133.242.180.100",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T14:08:50.735754"
+  },
+  {
+    "case_id": "EMAIL-03BD0DF45535",
+    "ip": "103.21.124.1",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T14:12:06.049501"
+  },
+  {
+    "case_id": "EMAIL-EB2C66D16BCB",
+    "ip": "103.21.124.1",
+    "domain": "example.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "3ips.eml",
+    "subject": "Security Verification Required",
+    "message_id": "<test-sample-12345@example.com>",
+    "timestamp": "2026-09-20T14:12:06.188462"
+  },
+  {
+    "case_id": "EMAIL-D3029C310C96",
+    "ip": null,
+    "domain": "francisxavier.ac.in",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "original_msg.eml",
+    "subject": "",
+    "message_id": "<CAFCGwBd9pOopHoJWty+Rn2f+4nRhk4ooxQJfp9cH4e_wiTxuHQ@mail.gmail.com>",
+    "timestamp": "2026-09-20T14:18:44.840204"
+  },
+  {
+    "case_id": "EMAIL-DD52B02BA8F6",
+    "ip": "159.183.119.111",
+    "domain": "email.openai.com",
+    "reply_domain": null,
+    "url_domains": [
+      "cdn.openai.com",
+      "u.email.openai.com",
+      "persistent.oaistatic.com",
+      "chatgpt.com",
+      "cdn.mcauto-images-production.sendgrid.net"
+    ],
+    "filename": "Your_free_month_of_ChatGPT_Plus.eml",
+    "subject": "Your free month of ChatGPT Plus",
+    "message_id": "<mR3lIlbhRl2Ka8BJc40vNw@geopod-ismtpd-17>",
+    "timestamp": "2026-09-20T14:19:43.094886"
+  },
+  {
+    "case_id": "EMAIL-E22014B460E5",
+    "ip": "137.184.34.4",
+    "domain": "accounts.google.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "sampleMail_1_1.eml",
+    "subject": "Security alert: New sign-in detected on your Google Account",
+    "message_id": "<CA+vM1z234567890abcdef@mail.gmail.com>",
+    "timestamp": "2026-09-20T14:20:30.916728"
+  },
+  {
+    "case_id": "EMAIL-C229336C25A0",
+    "ip": "137.184.34.4",
+    "domain": "accounts.google.com",
+    "reply_domain": null,
+    "url_domains": [],
+    "filename": "sampleMail_1_1.eml",
+    "subject": "Security alert: New sign-in detected on your Google Account",
+    "message_id": "<CA+vM1z234567890abcdef@mail.gmail.com>",
+    "timestamp": "2026-09-20T14:20:32.962803"
   }
 ]

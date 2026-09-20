@@ -15,6 +15,7 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 
 REQUIRED_COLUMNS = {"sender", "receiver", "subject", "body", "label", "urls"}
 TEXT_COLUMNS = ["sender", "receiver", "subject", "body", "urls"]
+TARGET_CLASSES = ("legitimate", "suspicious", "impersonated", "phishing", "fraud")
 
 
 def email_text(frame):
@@ -25,7 +26,7 @@ def email_text(frame):
 
 
 def load_training_data(input_path):
-    paths = sorted(glob.glob(os.path.join(input_path, "*.csv"))) if os.path.isdir(input_path) else [input_path]
+    paths = sorted(glob.glob(os.path.join(input_path, "**", "*.csv"), recursive=True)) if os.path.isdir(input_path) else [input_path]
     if not paths:
         raise ValueError(f"No CSV files found in {input_path}")
 
@@ -33,22 +34,38 @@ def load_training_data(input_path):
     used_files = []
     for path in paths:
         data = pd.read_csv(path, engine="python", on_bad_lines="warn")
-        if "label" not in data.columns:
-            print(f"Skipping {path}: no label column")
+        category = os.path.basename(os.path.dirname(path)).lower()
+        label_column = "label"
+        if label_column not in data.columns:
+            category_label_columns = {
+                "impersonated": "impersonated",
+                "suspicious": "suspious",
+            }
+            label_column = category_label_columns.get(category)
+        if not label_column or label_column not in data.columns:
+            print(f"Skipping {path}: no supported label column")
             continue
         for column in TEXT_COLUMNS:
             if column not in data.columns:
                 data[column] = ""
-        data["label"] = pd.to_numeric(data["label"], errors="coerce")
-        data = data.dropna(subset=["label"])
-        data["label"] = data["label"].astype(int)
-        data = data[data["label"].isin([0, 1])]
+        data["source_label"] = pd.to_numeric(data[label_column], errors="coerce")
+        data = data.dropna(subset=["source_label"])
+        data["source_label"] = data["source_label"].astype(int)
+        data = data[data["source_label"].isin([0, 1])]
+        if category not in {"fraud", "impersonated", "suspicious", "phishing"}:
+            print(f"Skipping {path}: parent folder must be a threat category")
+            continue
+        # Positive rows inherit their manually curated folder category. Negative
+        # rows are legitimate examples from mixed datasets.
+        data["label"] = data["source_label"].map(
+            lambda value: category if value == 1 else "legitimate"
+        )
         if not data.empty:
             frames.append(data[TEXT_COLUMNS + ["label"]])
             used_files.append({"file": path, "rows": len(data)})
 
     if not frames:
-        raise ValueError("No labeled rows with binary 0/1 labels were found")
+        raise ValueError("No labeled rows with binary 0/1 labels were found in category folders")
     return pd.concat(frames, ignore_index=True), used_files
 
 
@@ -59,7 +76,7 @@ def build_model():
             strip_accents="unicode",
             ngram_range=(1, 2),
             min_df=2,
-            max_features=150000,
+            max_features=50000,
             sublinear_tf=True,
         )),
         ("character", TfidfVectorizer(
@@ -67,7 +84,7 @@ def build_model():
             lowercase=True,
             ngram_range=(3, 5),
             min_df=3,
-            max_features=100000,
+            max_features=30000,
             sublinear_tf=True,
         )),
     ])
@@ -76,7 +93,7 @@ def build_model():
         ("classifier", LogisticRegression(
             max_iter=1000,
             class_weight="balanced",
-            solver="liblinear",
+            solver="lbfgs",
             random_state=42,
         )),
     ])
@@ -90,8 +107,10 @@ def main():
 
     csv.field_size_limit(sys.maxsize)
     data, used_files = load_training_data(args.input)
-    if set(data["label"].unique()) != {0, 1}:
-        raise ValueError("The label column must contain exactly 0 and 1 classes.")
+    classes = set(data["label"].unique())
+    missing_classes = set(TARGET_CLASSES) - classes
+    if missing_classes:
+        raise ValueError(f"Missing required classes: {', '.join(sorted(missing_classes))}")
 
     texts = email_text(data)
     labels = data["label"]
@@ -105,22 +124,20 @@ def main():
 
     model = build_model()
     model.fit(x_train, y_train)
-    probabilities = model.predict_proba(x_test)[:, 1]
-    predictions = (probabilities >= 0.5).astype(int)
+    predictions = model.predict(x_test)
 
     print(classification_report(y_test, predictions, digits=4))
     print(f"accuracy: {accuracy_score(y_test, predictions):.4f}")
-    print(f"roc_auc: {roc_auc_score(y_test, probabilities):.4f}")
 
     artifact = {
         "model": model,
-        "label_meaning": {"0": "legitimate", "1": "spam_or_phishing"},
+        "label_meaning": {str(index): label for index, label in enumerate(model.named_steps["classifier"].classes_)},
         "training_columns": TEXT_COLUMNS,
         "training_files": used_files,
         "training_rows": len(data),
+        "classes": list(model.named_steps["classifier"].classes_),
         "metrics": {
             "accuracy": accuracy_score(y_test, predictions),
-            "roc_auc": roc_auc_score(y_test, probabilities),
         },
     }
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)

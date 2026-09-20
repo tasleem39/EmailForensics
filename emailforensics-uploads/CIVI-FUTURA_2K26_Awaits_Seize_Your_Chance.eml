@@ -1,0 +1,363 @@
+Delivered-To: tasleems.ug.24.am@francisxavier.ac.in
+Received: by 2002:a17:504:c78d:b0:1ea1:fd83:3693 with SMTP id ms13csp6343759njb;
+        Wed, 16 Sep 2026 07:25:15 -0700 (PDT)
+X-Received: by 2002:a05:620a:2b8b:b0:939:6e1c:8946 with SMTP id af79cd13be357-93bb75dc447mr317471685a.26.1789568715056;
+        Wed, 16 Sep 2026 07:25:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789568715; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JgXOu+FrgM0qu8wHbbFeeTPLddNkl9GHsg3s5NCSTZQx2cknh+IGqH3hUtIH0yDi5h
+         WRBOqWm3Pup9aJAxLigG9D2oPDFZ/jEbhdMK4Zt710HtBDr7/74+gynSvAm1P/sj8NzO
+         vv7VXsmZYjdBBxcaXJQznZos752ohNr1PkCwtuli4DbXbzjVvaHfIrWLeIwUF3nB9r/G
+         2ioqB9G7ZvwPIw4BBPrRB5VLRzH42OeUUzyOR8URjTvBqltll8cNcJXhVY+2//oJrRnS
+         YCm2xAjg5NtnbfkqeMle1FCXel88my3BBdmNgYzwR7XmJI/Xkbnb+Z4vPZGFaPzLiGDT
+         QhFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=feedback-id:message-id:list-unsubscribe:list-unsubscribe-post
+         :mime-version:subject:to:reply-to:from:date:dkim-signature;
+        bh=vr3mzvLPlgmIlcrdGZUmvxGIMtbZefeRI4oZZQ0vtTk=;
+        fh=Ai/3EIs2T9g3rFnVYyXSgefKFf/fMQvAnnrlaCmjqVw=;
+        b=BNPDXgmZzynAg5dheAPVsPbnl6WM7qJ/lBfcHB6bZPZCZQyDIaIl9bz6s3YjKfUiJ8
+         iNoomnV3SXXVJGLcFLmn57AR5+b3Duol6mAqdNEDOI+/9wgaP5g0I3ZArKWMh+9gQ/6j
+         eoDFlmewMRrkjbyo4zJ1BOaVV2/Iqfe9GBEMCVrLgHzpox3qJFK/dORykpsI4D3yNSL7
+         UNMplkFhelErItQ5N4imvYWaR2Kmx/vdIG8D9i1aQ2U65EsB/2PEotuDJWhuxu2cQRoR
+         jTsEDb/eSP1DDmZP5qZIUTjjulwalQzh+SQoPyGLfyhDSZOHiU1Z6YKUg8SBIok+2tSq
+         DWTg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b="I56wK/MH";
+       spf=pass (google.com: domain of 010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@amazonses.com designates 54.240.9.112 as permitted sender) smtp.mailfrom=010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@amazonses.com
+Return-Path: <010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@amazonses.com>
+Received: from a9-112.smtp-out.amazonses.com (a9-112.smtp-out.amazonses.com. [54.240.9.112])
+        by mx.google.com with ESMTPS id af79cd13be357-93b81d97599si215921985a.392.2026.09.16.07.25.14
+        for <tasleems.ug.24.am@francisxavier.ac.in>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 07:25:15 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@amazonses.com designates 54.240.9.112 as permitted sender) client-ip=54.240.9.112;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b="I56wK/MH";
+       spf=pass (google.com: domain of 010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@amazonses.com designates 54.240.9.112 as permitted sender) smtp.mailfrom=010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1789568714;
+	h=Date:From:Reply-To:To:Subject:MIME-Version:Content-Type:List-Unsubscribe-Post:List-Unsubscribe:Message-ID:Feedback-ID;
+	bh=pPIt7l9/dK+2o3T/dpCnybsxIFN4ekAbhxIMo+k17SQ=;
+	b=I56wK/MHdI+sq0s19liB5Fd0xMLrkaDpBmvSexPwZdr3eHqKR1N/xVp0DpMmJXYB
+	U6vtbQzQ9pdc8MV84YEJl7RRsD4qJrqfwaWQkJ4i1hLd9KYqOuAA1SLROR8k4CZ9bsk
+	zfvJtMawX0EcuqnA+56quYIU9O1Lo2xSQfjjeydE=
+Date: Wed, 16 Sep 2026 14:25:13 +0000
+From: Reward Points <socialmedia@francisxavier.ac.in>
+Reply-To: socialmedia@francisxavier.ac.in
+To: tasleems.ug.24.am@francisxavier.ac.in
+Subject: =?UTF-8?Q?CIVI-FUTURA_2K26_Awaits!_=F0=9F=8E=89_Seize_Your_Chance!?=
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_361153_1249720325.1789568714541"
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <https://www.postermywall.com/index.php/emailmarketing/unsubscribe?email=tasleems.ug.24.am%40francisxavier.ac.in&ml=HCF8x9h05FgC7MeCjVYd5vCiEPcRHJrf1wBVpDeNVt85c2nqwRnGe5Y_E01wpOXNHiVAwzn1dtqC_lqk&huid=&source=OneClick>
+Message-ID: <010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000@email.amazonses.com>
+Feedback-ID: ::1.us-east-1.02yECow4OUzjYgesy/2Bw/AlYj82r0kE2U7jvd3ocnA=:AmazonSES
+X-SES-Outgoing: 2026.09.16-54.240.9.112
+
+------=_Part_361153_1249720325.1789568714541
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+                                =E2=80=8A    CIVI-FUTURA 2K26 =E2=80=93 Hac=
+kathon Participation   Dear Students,  Hackathons &amp; External Achievemen=
+ts account for 5% of your Reward Points.  Make use of this opportunity to p=
+articipate in CIVI-FUTURA 2K26 =E2=80=93 Civil Engineering Hackathon on  18=
+ September 2026  and earn your 5% Reward Points.  Participate. Innovate. Ea=
+rn.  Regards, Reward Points Team    =E2=80=8A              Register        =
+        Register                          =20
+
+=20
+
+------=_Part_361153_1249720325.1789568714541
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:schemas-microso=
+ft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:office"
+      style=3D"min-height: 100%; font-family: Helvetica Neue, Helvetica, Ar=
+ial, sans-serif; font-size: 14px; line-height: 150%; text-align: left; back=
+ground: #fff; "
+      lang=3D"en">
+<head>
+    <title></title>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+">
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width">
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+    <!--[if gte mso 9]>
+<xml>
+    <o:OfficeDocumentSettings>
+        <o:AllowPNG/>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<!--[if mso]>
+<style type=3D"text/css">
+    table {
+        border-collapse: collapse;
+        mso-table-lspace: 0;
+        mso-table-rspace: 0;
+    }
+
+    img {
+        -ms-interpolation-mode: bicubic;
+    }
+</style>
+<![endif]-->
+            <style type=3D"text/css">
+            @media screen and (max-width: 550px){.pmw-responsive-table .pmw=
+-responsive-cell{width:100% !important;display:block;}}
+@media screen and (max-width: 550px){.auto-width-cta{display:table !importa=
+nt;}}
+@media screen and (max-width: 550px){.pmw-responsive-table{min-height:10px =
+!important;}}
+@media screen and (max-width: 550px){.pmw-content-container{width:100% !imp=
+ortant;}}
+@media screen and (max-width: 550px){.pmw-media-type{width:100% !important;=
+}}
+@media screen and (max-width: 550px){.pmw-content-button{min-width:fit-cont=
+ent !important;}}
+@media screen and (max-width: 550px){#iakqq{width:100% !important;}}
+@media screen and (max-width: 550px){#ivdquv{width:100% !important;}}      =
+  </style>
+        </head>
+<body style=3D"margin: 0 !important; -webkit-text-size-adjust:100%; -ms-tex=
+t-size-adjust:100%; width: 100% !important;">
+    <!--[if !mso]><!-->
+    <span class=3D"preheader"
+          style=3D"display: none !important; mso-hide: all; visibility: hid=
+den; opacity: 0; color: transparent; height: 0; width: 0;">Participate, inn=
+ovate, and boost your Reward Points by 5%!</span>
+    <div style=3D"display: none; mso-hide: all; max-height: 0px; overflow: =
+hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&=
+zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwn=
+j;&nbsp;&zwnj;&nbsp;
+    </div>
+    <!--<![endif]-->
+<table data-is-pmw-wrapper=3D"1" data-pmw-type=3D"postermywall-wrapper" cel=
+lspacing=3D"0" cellpadding=3D"0" bgcolor=3D"#FAFAFA" style=3D"box-sizing: b=
+order-box; background-color: #FAFAFA; height: 100%; width: 100%;" width=3D"=
+100%" height=3D"100%"><tbody data-is-pmw-tbody=3D"1" data-pmw-type=3D"poste=
+rmywall-tbody" style=3D"box-sizing: border-box;"><tr data-is-pmw-row=3D"1" =
+data-pmw-type=3D"postermywall-row" style=3D"box-sizing: border-box; height:=
+ 100%;"><td data-is-pmw-wrapper-cell=3D"1" data-pmw-type=3D"postermywall-wr=
+apper-cell" cellspacing=3D"0" align=3D"center" style=3D"box-sizing: border-=
+box; height: 100%;" height=3D"100%" bgcolor=3D"#FAFAFA"><!--[if mso]><table=
+ role=3D"presentation" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" b=
+order=3D"0"><tr><td align=3D"center"><center><table class=3D"pmw-outlook-gh=
+ost" role=3D"presentation" width=3D"660" style=3D"width:660px;" align=3D"ce=
+nter" cellpadding=3D"0" cellspacing=3D"0" border=3D"0"><tr><td><![endif]-->=
+<table data-is-pmw-content=3D"1" data-pmw-type=3D"postermywall-content" cel=
+lspacing=3D"0" bgcolor=3D"#FFFFFF" class=3D"pmw-content-container" style=3D=
+"box-sizing:border-box;background-color:#FFFFFF;border-color:#FFFFFF;font-f=
+amily:Helvetica, sans-serif;margin-left:auto;margin-right:auto;height:100%;=
+min-width:min(600px, 100%);min-height:100%;max-width:920px;max-height:none;=
+vertical-align:top;width:80%;" width=3D"660" height=3D"100%" valign=3D"top"=
+><tbody data-is-pmw-tbody=3D"1" data-pmw-type=3D"postermywall-tbody" style=
+=3D"box-sizing: border-box;"><tr data-is-pmw-row=3D"1" data-pmw-type=3D"pos=
+termywall-row" style=3D"box-sizing: border-box;"><td data-pmw-type=3D"poste=
+rmywall-content-container" data-is-pmw-content-container=3D"1" align=3D"cen=
+ter" cellpadding=3D"0" style=3D"box-sizing: border-box; background: none; w=
+idth: 100%; margin: 0; padding: 0; height: 100%; min-height: 100%; max-heig=
+ht: none; vertical-align: top; mso-padding-alt: 0;" width=3D"660" height=3D=
+"100%" valign=3D"top" bgcolor=3D"#FFFFFF"><table data-is-pmw-section=3D"1" =
+data-pmw-type=3D"postermywall-section" cellspacing=3D"0" cellpadding=3D"15"=
+ width=3D"100%" class=3D"pmw-responsive-table pmw-responsive-table-tablet" =
+style=3D"box-sizing:border-box;padding:15px;margin:0px;width:100%;vertical-=
+align:middle;height:auto;font-family:Helvetica, sans-serif;border-color:#FF=
+FFFF;border-radius:0;opacity:100%;mso-padding-alt:15px;" height=3D"auto" va=
+lign=3D"middle"><tbody data-is-pmw-tbody=3D"1" data-pmw-type=3D"postermywal=
+l-tbody" class=3D"pmw-table" style=3D"box-sizing: border-box; background-co=
+lor: transparent;" bgcolor=3D"transparent"><tr data-is-pmw-row=3D"1" data-p=
+mw-type=3D"postermywall-row" style=3D"box-sizing: border-box;"><td data-is-=
+pmw-cell=3D"1" data-pmw-type=3D"postermywall-cell" cellpadding=3D"0" width=
+=3D"630" class=3D"pmw-responsive-cell" style=3D"box-sizing:border-box;margi=
+n:0px;min-width:10px;padding:0px;width:100%;mso-padding-alt:0px;padding-lef=
+t:0px;padding-right:0px;padding-top:0px;padding-bottom:0px;" align=3D"cente=
+r" bgcolor=3D"#FFFFFF"><!--[if mso]><img data-is-pmw-image=3D"1" data-pmw-t=
+ype=3D"postermywall-image" alt=3D"Image" aria-hidden=3D"true" src=3D"https:=
+//d1csarkz8obe9u.cloudfront.net/uploads/emails/9865cd4e9a9635dcc564d64af93c=
+fefa.jpg" data-has-extended-controls=3D"1" id=3D"iakqq" style=3D"box-sizing=
+:border-box;width:100%;--mobile-width:100%;max-width:100%;display:block;hei=
+ght:auto;border-radius:12px;border-bottom-left-radius:0px;border-top-left-r=
+adius:12px;border-top-right-radius:12px;border-bottom-right-radius:0px;" wi=
+dth=3D"495" class=3D"pmw-media-type" height=3D"auto"><![endif]--><!--[if !m=
+so]><!--><img data-is-pmw-image=3D"1" data-pmw-type=3D"postermywall-image" =
+alt=3D"Image" aria-hidden=3D"true" src=3D"https://d1csarkz8obe9u.cloudfront=
+.net/uploads/emails/f3f0816471d5f65ca9162644a1c6818a950975.jpg" data-has-ex=
+tended-controls=3D"1" id=3D"iakqq" style=3D"box-sizing: border-box; width: =
+100%; --mobile-width: 100%; max-width: 100%; display: block; height: auto; =
+border-radius: 12px; border-color: #FFFFFF; border-bottom-left-radius: 0px;=
+ border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom=
+-right-radius: 0px;" width=3D"495" class=3D"pmw-media-type" height=3D"auto"=
+><!--<![endif]--><table data-pmw-type=3D"postermywall-section-divider" data=
+-is-pmw-divider=3D"1" cellspacing=3D"0" cellpadding=3D"0" style=3D"box-sizi=
+ng:border-box;width:100%;height:12px;border:0;border-radius:0;margin:0;outl=
+ine:none;background:none;color:transparent;" width=3D"100%" height=3D"12"><=
+tr data-is-pmw-row=3D"1" data-pmw-type=3D"postermywall-row" style=3D"box-si=
+zing: border-box;"><td data-pmw-type=3D"postermywall-divider-cell" data-is-=
+pmw-divider-cell=3D"1" cellspacing=3D"0" cellpadding=3D"0" style=3D"box-siz=
+ing:border-box;width:100%;height:12px;mso-line-height-rule:exactly;line-hei=
+ght:9pt;font-size:0;mso-ansi-font-size:0pt;" height=3D"12" bgcolor=3D"#FFFF=
+FF">&#x200A;</td></tr></table><p data-pmw-type=3D"postermywall-text" style=
+=3D"color:#101ca0;display:block;padding:10px;margin:0;width:unset;box-sizin=
+g:border-box;word-break:break-word;overflow-wrap:break-word;letter-spacing:=
+normal;font-size:24px;mso-ansi-font-size:16.2pt;font-weight:bold;mso-line-h=
+eight-rule:exactly;line-height:21.6pt;font-family:Arial Black;text-align:ce=
+nter;opacity:100%;border-color:#FFFFFF;">CIVI-FUTURA 2K26 &#x2013; Hackatho=
+n Participation</p><p data-pmw-type=3D"postermywall-text" style=3D"color:#0=
+00000;display:block;padding:10px;margin:0;width:unset;box-sizing:border-box=
+;word-break:break-word;overflow-wrap:break-word;letter-spacing:normal;font-=
+size:14px;mso-ansi-font-size:9.45pt;font-weight:normal;mso-line-height-rule=
+:exactly;line-height:15pt;font-family:Helvetica, sans-serif;text-align:left=
+;opacity:100%;border-color:#FFFFFF;"><br>Dear Students,<br><br>Hackathons &=
+amp; External Achievements account for 5% of your Reward Points.<br><br>Mak=
+e use of this opportunity to participate in CIVI-FUTURA 2K26 &#x2013; Civil=
+ Engineering Hackathon on <b style=3D"box-sizing: border-box;">18 September=
+ 2026</b> and earn your 5% Reward Points.<br><br>Participate. Innovate. Ear=
+n.<br><br>Regards,<br>Reward Points Team</p><table data-pmw-type=3D"posterm=
+ywall-section-divider" data-is-pmw-divider=3D"1" cellspacing=3D"0" cellpadd=
+ing=3D"0" style=3D"box-sizing:border-box;width:100%;height:16px;border:0;bo=
+rder-radius:0;margin:0;outline:none;background:none;color:transparent;" wid=
+th=3D"100%" height=3D"16"><tr data-is-pmw-row=3D"1" data-pmw-type=3D"poster=
+mywall-row" style=3D"box-sizing: border-box;"><td data-pmw-type=3D"postermy=
+wall-divider-cell" data-is-pmw-divider-cell=3D"1" cellspacing=3D"0" cellpad=
+ding=3D"0" style=3D"box-sizing:border-box;width:100%;height:16px;mso-line-h=
+eight-rule:exactly;line-height:12pt;font-size:0;mso-ansi-font-size:0pt;" he=
+ight=3D"16" bgcolor=3D"#FFFFFF">&#x200A;</td></tr></table><!--[if mso]><tab=
+le style=3D"height: 0; padding: 0; margin: 0; background-color: transparent=
+;"></table><table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" border=
+=3D"0"><tr><td align=3D"center"><v:roundrect xmlns:v=3D"urn:schemas-microso=
+ft-com:vml" xmlns:w=3D"urn:schemas-microsoft-com:office:word" href=3D"https=
+://forms.gle/bWrEWDV3XS76goBe7" style=3D"height:40px;v-text-anchor:middle;w=
+idth:138.6px;" arcsize=3D"30%" stroked=3D"false" fillcolor=3D"#000000"> <w:=
+anchorlock/> <center style=3D"color:#FFFFFF;font-family:Helvetica, sans-ser=
+if;text-decoration:none;font-size:10.5pt;font-weight:normal;font-style:norm=
+al;">Register</center> </v:roundrect></td></tr></table><table style=3D"heig=
+ht: 0; padding: 0; margin: 0; background-color: transparent;"></table><![en=
+dif]--><!--[if !mso]><!--><a data-is-pmw-button=3D"1" data-pmw-type=3D"post=
+ermywall-button" id=3D"ivdquv" width=3D"116" data-url=3D"https://forms.gle/=
+bWrEWDV3XS76goBe7" has-custom-url=3D"1" href=3D"https://fz387x3z.r.us-east-=
+1.awstrack.me/L0/https:%2F%2Fforms.gle%2FbWrEWDV3XS76goBe7/1/010001a0aa9b84=
+74-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000/3mPMkj6rllZKeXUwsXrutWF_AU0=
+=3D473" target=3D"_blank" class=3D"pmw-content-button" style=3D"box-sizing:=
+border-box;background-color:#000000;border-radius:12px;color:#FFFFFF;paddin=
+g:10px;font-size:14px;letter-spacing:normal;line-height:20px;margin:0 auto =
+0 auto;width:22%;white-space:break-spaces;vertical-align:middle;text-align:=
+center;display:table;font-family:Helvetica, sans-serif;opacity:100%;border-=
+color:#FFFFFF;font-style:normal;font-weight:normal;text-decoration:none;pad=
+ding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;--mo=
+bile-width:100%;"><table data-is-pmw-table=3D"1" data-pmw-type=3D"postermyw=
+all-table" cellspacing=3D"0" width=3D"100%" style=3D"box-sizing:border-box;=
+text-align:center;width:100%;font-weight:inherit;font-style:inherit;color:i=
+nherit;font-size:inherit;line-height:inherit;" align=3D"inherit" border=3D"=
+0"><tr data-is-pmw-row=3D"1" data-pmw-type=3D"postermywall-row" style=3D"bo=
+x-sizing: border-box;"><td data-is-pmw-cell=3D"1" data-pmw-type=3D"postermy=
+wall-cell" width=3D"auto" class=3D"pmw-responsive-cell" style=3D"box-sizing=
+:border-box;text-align:center;width:auto;" align=3D"inherit" bgcolor=3D"#00=
+0000"><p data-pmw-type=3D"postermywall-text" style=3D"box-sizing: border-bo=
+x; margin: 0; width: auto;">Register</p></td></tr></table></a><!--<![endif]=
+--></td></tr></tbody></table></td></tr></tbody></table><!--[if mso]></td></=
+tr></table></center></td></tr></table><![endif]--></td></tr></tbody></table=
+><style>
+@media screen and (max-width: 550px) {
+  .pmw-responsive-table .pmw-responsive-cell {
+    width: 100% !important;
+    display: block;
+  }
+
+  .pmw-responsive-table {
+    min-height: 10px !important;
+  }
+
+  .pmw-content-container {
+    width: 100% !important;
+  }
+
+  .pmw-media-type {
+    width: 100% !important;
+  }
+
+  .pmw-content-button {
+    min-width: fit-content !important;
+  }
+
+  #iakqq {
+    width: 100% !important;
+  }
+
+  #ivdquv {
+    width: 100% !important;
+  }
+}
+</style>
+
+<div style=3D"background: #fff;padding: 8px 4px; color: #403F5D; text-align=
+: center; line-height: 1.4; font-weight: 300 !important; font-family: Robot=
+o,RobotoDraft,Helvetica, Arial, sans-serif !important; font-size: 12px;"
+     align=3D"left">
+    <!--                                            <br> Reason goes here <=
+br>-->
+           =20
+<div style=3D"text-align: center; padding: 16px 4px; background-color: #FAF=
+AFA;">
+    <p style=3D"margin: 0 0 8px 0; font-family: 'Inter', Helvetica, Arial, =
+sans-serif !important; font-size: 12px; line-height: 14px; font-weight: 400=
+; color: #858597;">
+        Francis Xavier Engineering College 103/G2 Bypass Road, Vannarpettai=
+, Tirunelveli, Tamil Nadu, IN 627003    </p>
+
+    <div style=3D"font-family: 'Inter', Helvetica, Arial, sans-serif !impor=
+tant; font-size: 12px; line-height: 14px; font-weight: 400; color: #858597;=
+">
+        <a style=3D"color: #858597; text-decoration: underline; font-weight=
+: 400;"
+           href=3D"https://fz387x3z.r.us-east-1.awstrack.me/L0/https:%2F%2F=
+www.postermywall.com%2Findex.php%2Femailmarketing%2Funsubscribe%3Femail=3Dt=
+asleems.ug.24.am@francisxavier.ac.in%26ml=3DHCF8x9h05FgC7MeCjVYd5vCiEPcRHJr=
+f1wBVpDeNVt85c2nqwRnGe5Y_E01wpOXNHiVAwzn1dtqC_lqk%26huid=3De76256a08e782db3=
+94cbb54de463c32e%26source=3DEditor/1/010001a0aa9b8474-a0d4e159-91f0-4d5f-9c=
+f5-f160f5c113c9-000000/3MjNwyJC1WWgaDuJb0tR3valOtM=3D473">Unsubscribe</a>
+        <span style=3D"display: inline-block; width: 1px; height: 12px; bac=
+kground-color: #DCDCE1; margin: 0 8px; vertical-align: middle;"></span>
+        <a style=3D"color: #858597; text-decoration: underline; font-weight=
+: 400;"
+           href=3D"https://fz387x3z.r.us-east-1.awstrack.me/L0/https:%2F%2F=
+www.postermywall.com%2Findex.php%2Femailmarketing%2FviewEmail%2Fae8d7bfdd5a=
+b0dba8c87fd9cfb6d2111/1/010001a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113=
+c9-000000/5FIZN73LlipUnUtP9b8ZAv30aRw=3D473"
+        >View in browser</a>
+    </div>
+
+    </div>
+    <img alt=3D"" src=3D"https://fz387x3z.r.us-east-1.awstrack.me/I0/010001=
+a0aa9b8474-a0d4e159-91f0-4d5f-9cf5-f160f5c113c9-000000/vmBG6QKz6ubNFFh-2DcL=
+tougHtc=3D473" style=3D"display: none; width: 1px; height: 1px;">
+</body>
+</html>
+------=_Part_361153_1249720325.1789568714541--
